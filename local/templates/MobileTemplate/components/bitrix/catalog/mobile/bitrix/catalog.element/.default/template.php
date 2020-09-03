@@ -26,11 +26,11 @@ $strObName = 'obCatalogElement';
 			<!-- <span class="detail_item_img_lupe"></span> -->
 		</div>
 	<?endif;?>
-	<div class="right-col" id="elementProps-<?= $arResult['ID']; ?>">
-		<h2 class="detail_item_title">
+	<h2 class="detail_item_title">
 			<a href="<?=$arResult["DETAIL_PAGE_URL"]?>" title="<?=$arResult["NAME"]?>"><?=$arResult["NAME"]?></a>
 			<?if ($sticker):?><br/><span style="color:#9b0000; font-size: 14px;"><?=$sticker?></span><?endif?>
 		</h2>
+	<div class="right-col" id="elementProps-<?= $arResult['ID']; ?>">
 		<div class="form product-scu-container" data-entity="sku-block" data-entity-id="<?= $arResult['ID']; ?>">
 		<?
 			$firstOffer = $arResult['OFFERS'][$arResult['OFFER_ID_SELECTED']]; 
@@ -59,7 +59,8 @@ $strObName = 'obCatalogElement';
 			}
 		?>
 		</div>
-
+	</div>
+	<div class="wrapper-price">
 		<div class="line amountBlock" data-type-container="order">
 			<div class="cash productPrice">
 				<span class="prefix-priceOffer"></span>
