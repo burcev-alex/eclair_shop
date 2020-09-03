@@ -1,5 +1,7 @@
 <?if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 
+use Bitrix\Main\Localization\Loc;
+use Bitrix\Sale\PriceMaths;
 
 $arIds = [];
 foreach ($arResult['ITEMS']['AnDelCanBuy'] as $key  =>  $arElement) {
@@ -25,4 +27,11 @@ foreach ($arResult["ITEMS_IMG"] as $val=>$arPhoto)
 		'HEIGHT' => $arFileTmp["height"],
 	);
 }
+
+foreach ($arResult['ITEMS']["AnDelCanBuy"] as $row)
+{
+	
+}
+
+#echo '<pre>'.print_r($arResult['ITEMS']["AnDelCanBuy"], true).'</pre>';
 ?>

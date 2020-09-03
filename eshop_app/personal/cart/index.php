@@ -21,6 +21,11 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 		"SECTION_ID" => "SECTION_ID",
 		"ELEMENT_ID" => "ELEMENT_ID",
 	),
+	"OFFERS_PROPS" => array(
+		0 => "KRUPA",
+		1 => "BUTTER",
+		2 => "PREPARED_ON",
+	),
 	"HIDE_COUPON" => "N",
 	"QUANTITY_FLOAT" => "N",
 	"PRICE_VAT_SHOW_VALUE" => "N",

@@ -5,18 +5,6 @@ CJSCore::Init(array("jquery"));
     <div class="cart_item_list">
         <div class="cart_item_list_top_container">
             <a href="javascript:void(0)" class="bedit cart_item_list_filter_button" onclick="changeMode()"></a>
-            <!--		<ul>-->
-            <!--			<li class="current"><a href="javascript:void(0)">-->
-            <? //=GetMessage("SALE_PRD_IN_BASKET_ACT")?><!-- <span class="cart-item-title">(-->
-            <? //=count($arResult["ITEMS"]["AnDelCanBuy"])?><!--)</span></a></li>-->
-            <!--			<li ontouchstart="ShowBasketItems(2);"><a href="javascript:void(0)">-->
-            <? //=GetMessage("SALE_PRD_IN_BASKET_SHELVE")?><!-- <span class="delay-item-title">(-->
-            <? //=count($arResult["ITEMS"]["DelDelCanBuy"])?><!--)</span></a></li>-->
-            <? /*
-			<?if ($countItemsSubscribe=count($arResult["ITEMS"]["ProdSubscribe"])):?><a href="javascript:void(0)" onclick="ShowBasketItems(3);" class="sortbutton"><?=GetMessage("SALE_PRD_IN_BASKET_SUBSCRIBE")?> (<?=$countItemsSubscribe?>)</a><?endif?>
-			<?if ($countItemsNotAvailable=count($arResult["ITEMS"]["nAnCanBuy"])):?><a href="javascript:void(0)" onclick="ShowBasketItems(4);" class="sortbutton"><?=GetMessage("SALE_PRD_IN_BASKET_NOTA")?> (<?=$countItemsNotAvailable?>)</a><?endif?>
-			*/ ?>
-            <!--		</ul>-->
             <div class="clb"></div>
         </div>
 
@@ -64,20 +52,26 @@ CJSCore::Init(array("jquery"));
                             </div>
                             <?
                         } ?>
-                    <?endif; ?>
-                    <?/*if (in_array("VAT", $arParams["COLUMNS_LIST"])):?>
-				<td><?=$arBasketItems["VAT_RATE_FORMATED"]?></td>
-			<?endif;?>
-			<?if (in_array("TYPE", $arParams["COLUMNS_LIST"])):?>
-				<td><?=$arBasketItems["NOTES"]?></td>
-			<?endif;?>
-			<?if (in_array("DISCOUNT", $arParams["COLUMNS_LIST"])):?>
-				<td><?=$arBasketItems["DISCOUNT_PRICE_PERCENT_FORMATED"]?></td>
-			<?endif;?>
-			<?if (in_array("WEIGHT", $arParams["COLUMNS_LIST"])):?>
-				<td><?=$arBasketItems["WEIGHT_FORMATED"]?></td>
-			<?endif;*/
-                    ?>
+					<?endif; ?>
+					<?
+					#echo '<pre>'.print_r($arBasketItems, true).'</pre>';
+					?>
+					<!--<div class="basket-item-block-properties">
+						<div class="basket-item-property basket-item-property-scu-text" data-entity="basket-item-sku-block">
+							<div class="basket-item-property-name">Крупа</div>
+							<div class="basket-item-property-value">
+								<ul class="basket-item-scu-list">
+									<li class="basket-item-scu-item" title="Мультизлаковая" data-entity="basket-item-sku-field" data-initial="false" data-value-id="Мультизлаковая" data-sku-name="Мультизлаковая" data-property="KRUPA">
+										<span class="basket-item-scu-item-inner">Мультизлаковая 2</span>
+									</li>
+									<li class="basket-item-scu-item" title="Мультизлаковая" data-entity="basket-item-sku-field" data-initial="false" data-value-id="Мультизлаковая" data-sku-name="Мультизлаковая" data-property="KRUPA">
+										<span class="basket-item-scu-item-inner">Мультизлаковая 1</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					-->
 
                     <?
                     if (in_array("PRICE", $arParams["COLUMNS_LIST"])):?>

@@ -191,6 +191,11 @@ $APPLICATION->SetTitle('');
 			1 => "BUTTER",
 			2 => "PREPARED_ON",
 		),
+		"OFFERS_CART_PROPERTIES" => array(
+			0 => "KRUPA",
+			1 => "BUTTER",
+			2 => "PREPARED_ON",
+		),
     ]
 ); ?>
 </div>
