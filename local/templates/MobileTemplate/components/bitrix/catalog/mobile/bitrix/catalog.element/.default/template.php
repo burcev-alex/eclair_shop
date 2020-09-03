@@ -10,8 +10,10 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 			break;
 		}
 }
+
+$strObName = 'obCatalogElement';
 ?>
-<div class="detail_item">
+<div class="detail_item" id="<?=$strObName;?>">
 	<?if(is_array($arResult["PREVIEW_PICTURE"]) || is_array($arResult["DETAIL_PICTURE"])):?>
 		<div class="detail_item_img_container" <?if (!empty($arResult["PHOTO_GALLERY"])):?>onclick="showPhoto(<?=CUtil::PhpToJsObject($arResult["PHOTO_GALLERY"])?>, '<?=$arResult["NAME"]?>')"<?endif?>>
 			<a class="detail_item_img" href="javascript:void(0)">
@@ -24,176 +26,53 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 			<!-- <span class="detail_item_img_lupe"></span> -->
 		</div>
 	<?endif;?>
-	<h2 class="detail_item_title">
-		<a href="<?=$arResult["DETAIL_PAGE_URL"]?>" title="<?=$arResult["NAME"]?>"><?=$arResult["NAME"]?></a>
-		<?if ($sticker):?><br/><span style="color:#9b0000; font-size: 14px;"><?=$sticker?></span><?endif?>
-	</h2>
-
-	<?if(!is_array($arResult["OFFERS"]) || empty($arResult["OFFERS"])):?>
-		<?foreach($arResult["PRICES"] as $code=>$arPrice):?>
-			<?if($arPrice["CAN_ACCESS"]):?>
-				<?//=$arResult["CAT_PRICES"][$code]["TITLE"];?>
-				<?if($arPrice["DISCOUNT_VALUE"] < $arPrice["VALUE"]):?>
-					<div class="detail_price_container oldprice">
-						<span class="item_price"><?=$arPrice["PRINT_DISCOUNT_VALUE"]?></span><br />
-						<span class="item_price_old"><?=$arPrice["PRINT_VALUE"]?></span>
+	<div class="right-col" id="elementProps-<?= $arResult['ID']; ?>">
+		<h2 class="detail_item_title">
+			<a href="<?=$arResult["DETAIL_PAGE_URL"]?>" title="<?=$arResult["NAME"]?>"><?=$arResult["NAME"]?></a>
+			<?if ($sticker):?><br/><span style="color:#9b0000; font-size: 14px;"><?=$sticker?></span><?endif?>
+		</h2>
+		<div class="form product-scu-container" data-entity="sku-block" data-entity-id="<?= $arResult['ID']; ?>">
+		<?
+			$firstOffer = $arResult['OFFERS'][$arResult['OFFER_ID_SELECTED']]; 
+			foreach ($arResult['SKU_PROPS'] as $key => $arSkuOffer) {
+				$propertyId = intval($arSkuOffer['ID']);
+				?>
+				<div class="line" data-code="<?=$arSkuOffer['CODE']; ?>" data-entity="sku-line-block">
+					<div class="left">
+						<p><?=$arSkuOffer['NAME']; ?>:</p>
 					</div>
-				<?else:?>
-					<div class="detail_price_container">
-						<span class="item_price"><?=$arPrice["PRINT_VALUE"]?></span>
+					<div class="right">
+					<?foreach ($arSkuOffer['VALUES'] as $arValue) {
+						$firstElement = false;
+
+						if (intval($arValue['ID']) == intval($firstOffer['FILTER_PROPS'][$arSkuOffer['CODE']]['VALUE_ENUM_ID'])) {
+							$firstElement = true;
+						}
+						?>
+						<p class="sku-value<?=$firstElement ? ' active' : '';?>" data-treevalue="<?= $propertyId; ?>_<?= intval($arValue['ID']); ?>" data-onevalue="<?= intval($arValue['ID']); ?>"><?=$arValue['NAME']; ?></p>
+						<?
+					}
+					?>
 					</div>
-				<?endif;?>
-			<?endif;?>
-		<?endforeach;?>
-
-		<?if($arResult["CAN_BUY"]):?>
-			<?if($arParams["USE_PRODUCT_QUANTITY"]):?>
-			<div class="clb"></div>
-			<div class="detail_item_buy_container">
-				<form action="<?=POST_FORM_ACTION_URI?>" id="quantity_form" method="post" enctype="multipart/form-data"  >
-					<div class="detail_item_count">
-						<a href="javascript:void(0)" class="count_minus" id="count_minus" ontouchstart="if (BX('item_quantity').value > 1) BX('item_quantity').value--;"><span></span></a>
-							<input type="number" id="item_quantity" name="<?echo $arParams["PRODUCT_QUANTITY_VARIABLE"]?>" value="1">
-						<a href="javascript:void(0)" class="count_plus" id="count_plus" ontouchstart="BX('item_quantity').value++;"><span></span></a>
-					</div>
-					<input type="hidden" name="<?echo $arParams["ACTION_VARIABLE"]?>" value="ADD2BASKET">
-					<input type="hidden" name="<?echo $arParams["PRODUCT_ID_VARIABLE"]?>" value="<?echo $arResult["ID"]?>">
-					<a class="detail_item_buykey button_red_medium" ontouchstart="BX.toggleClass(this, 'active');" ontouchend="BX.toggleClass(this, 'active');" href="javascript:void(0)" onclick="
-							BX.addClass(BX.findParent(this, {class : 'detail_item'}, false), 'add2cart');
-							app.onCustomEvent('onItemBuy', {});
-							BX.ajax({
-								timeout:   30,
-								method:   'POST',
-								url:       '<?=CUtil::JSEscape(POST_FORM_ACTION_URI)?>',
-								processData: false,
-								data: {
-									<?echo $arParams["ACTION_VARIABLE"]?>: 'ADD2BASKET',
-									<?echo $arParams["PRODUCT_ID_VARIABLE"]?>: '<?echo $arResult["ID"]?>',
-									<?echo $arParams["PRODUCT_QUANTITY_VARIABLE"]?>: BX('quantity_form').elements['<?echo $arParams["PRODUCT_QUANTITY_VARIABLE"]?>'].value
-								},
-								onsuccess: function(reply){
-								},
-								onfailure: function(){
-								}
-							});
-							return BX.PreventDefault(event);
-					"><?echo GetMessage("CATALOG_BUY")?></a>
-					<a class="detail_item_buykey_cartlink button_yellow_small" href="<?echo $arParams["BASKET_URL"]?>" rel="nofollow"><?echo GetMessage("CATALOG_IN_CART")?></a>
-				</form>
-			</div>
-
-			<?else:?>
-			<div class="detail_item_buy_container">
-				<noindex>
-					<a class="detail_item_buykey button_red_medium" ontouchstart="BX.toggleClass(this, 'active');" ontouchend="BX.toggleClass(this, 'active');" href="<?echo $arResult["ADD_URL"]?>" onclick="
-						BX.addClass(BX.findParent(this, {class : 'detail_item'}, false), 'add2cart');
-						return addItemToCart(this);" rel="nofollow"><?echo GetMessage("CATALOG_BUY")?></a>
-					<a class="detail_item_buykey_cartlink button_yellow_small" href="<?echo $arParams["BASKET_URL"]?>" rel="nofollow"><?echo GetMessage("CATALOG_IN_CART")?></a>
-				</noindex> 
-			</div>
-			<?endif;?>
-
-
-		<?if(count($arResult["MORE_PHOTO"])>0):?>
-		<div class="detail_item_gallery" onclick="showPhoto(<?=CUtil::PhpToJsObject($arResult["PHOTO_GALLERY"])?>, '<?=$arResult["NAME"]?>')">
-			<div class="detail_item_gallery_topborder"></div>
-			<span class="detail_item_gallery_left"></span>
-			<div class="detail_item_gallery_tcontainer">
-				<ul>
-				<?foreach($arResult["MORE_PHOTO"] as $photo):?>
-					<li><a href="javascript:void(0)"><span><img src="<?=$photo["SRC"]?>" alt=""></span></a></li>
-				<?endforeach?>
-				</ul>
-			</div>
-			<div class="clb"></div>
-			<span class="detail_item_gallery_right"></span>
+				</div>
+				<?
+			}
+		?>
 		</div>
-		<?endif?>
 
+		<div class="line amountBlock" data-type-container="order">
+			<div class="cash productPrice">
+				<span class="prefix-priceOffer"></span>
+				<b class="priceOffer"><?=round($arResult['MIN_PRICE']['VALUE'], 2); ?></b>
+				<span class="sufix-priceOffer"> руб.</span>
+			</div>
+		</div>
 
-		<?/*elseif((count($arResult["PRICES"]) > 0) || is_array($arResult["PRICE_MATRIX"])):?>
-			<?=GetMessage("CATALOG_NOT_AVAILABLE")?>
-			<?$APPLICATION->IncludeComponent("bitrix:sale.notice.product", ".default", array(
-					"NOTIFY_ID" => $arResult['ID'],
-					"NOTIFY_PRODUCT_ID" => $arParams['PRODUCT_ID_VARIABLE'],
-					"NOTIFY_ACTION" => $arParams['ACTION_VARIABLE'],
-					"NOTIFY_URL" => htmlspecialcharsback($arResult["SUBSCRIBE_URL"]),
-					"NOTIFY_USE_CAPTHA" => "N"
-				),
-				$component
-			);?>
-		<?*/endif?>
-	<?endif;?>
-
+		<div class="line button-block">
+			<a class="btn btn-default product-item-detail-buy-button" rel="nofollow" href="/eshop_app/catalog/?action=ADD2BASKET&id_top1=<?=$firstOffer['ID']; ?>&SECTION_ID=<?=$arResult['IBLOCK_SECTION_ID'];?>&ELEMENT_ID=<?=$arResult['ID']; ?>" data-action="add_basket" data-product="<?=$firstOffer['ID']; ?>">Купить</a>
+		</div>
+	</div>
 </div>
-
-	<?/*if(is_array($arResult["OFFERS"]) && !empty($arResult["OFFERS"])):/*?>
-		<?foreach($arResult["OFFERS"] as $arOffer):?>
-			<?foreach($arParams["OFFERS_FIELD_CODE"] as $field_code):?>
-				<small><?echo GetMessage("IBLOCK_FIELD_".$field_code)?>:&nbsp;<?
-						echo $arOffer[$field_code];?></small><br />
-			<?endforeach;?>
-			<?foreach($arOffer["DISPLAY_PROPERTIES"] as $pid=>$arProperty):?>
-				<small><?=$arProperty["NAME"]?>:&nbsp;<?
-					if(is_array($arProperty["DISPLAY_VALUE"]))
-						echo implode("&nbsp;/&nbsp;", $arProperty["DISPLAY_VALUE"]);
-					else
-						echo $arProperty["DISPLAY_VALUE"];?></small><br />
-			<?endforeach?>
-			<?foreach($arOffer["PRICES"] as $code=>$arPrice):?>
-				<?if($arPrice["CAN_ACCESS"]):?>
-					<p><?=$arResult["CAT_PRICES"][$code]["TITLE"];?>:&nbsp;&nbsp;
-					<?if($arPrice["DISCOUNT_VALUE"] < $arPrice["VALUE"]):?>
-						<s><?=$arPrice["PRINT_VALUE"]?></s> <span class="catalog-price"><?=$arPrice["PRINT_DISCOUNT_VALUE"]?></span>
-					<?else:?>
-						<span class="catalog-price"><?=$arPrice["PRINT_VALUE"]?></span>
-					<?endif?>
-					</p>
-				<?endif;?>
-			<?endforeach;?>
-			<p>
-			<?if($arParams["DISPLAY_COMPARE"]):?>
-				<noindex>
-				<a href="<?echo $arOffer["COMPARE_URL"]?>" rel="nofollow"><?echo GetMessage("CT_BCE_CATALOG_COMPARE")?></a>&nbsp;
-				</noindex>
-			<?endif?>
-			<?if($arOffer["CAN_BUY"]):?>
-				<?if($arParams["USE_PRODUCT_QUANTITY"]):?>
-					<form action="<?=POST_FORM_ACTION_URI?>" method="post" enctype="multipart/form-data">
-					<table border="0" cellspacing="0" cellpadding="2">
-						<tr valign="top">
-							<td><?echo GetMessage("CT_BCE_QUANTITY")?>:</td>
-							<td>
-								<input type="text" name="<?echo $arParams["PRODUCT_QUANTITY_VARIABLE"]?>" value="1" size="5">
-							</td>
-						</tr>
-					</table>
-					<input type="hidden" name="<?echo $arParams["ACTION_VARIABLE"]?>" value="BUY">
-					<input type="hidden" name="<?echo $arParams["PRODUCT_ID_VARIABLE"]?>" value="<?echo $arOffer["ID"]?>">
-					<input type="submit" name="<?echo $arParams["ACTION_VARIABLE"]."BUY"?>" value="<?echo GetMessage("CATALOG_BUY")?>">
-					<input type="submit" name="<?echo $arParams["ACTION_VARIABLE"]."ADD2BASKET"?>" value="<?echo GetMessage("CT_BCE_CATALOG_ADD")?>">
-					</form>
-				<?else:?>
-					<noindex>
-					<a href="<?echo $arOffer["BUY_URL"]?>" rel="nofollow"><?echo GetMessage("CATALOG_BUY")?></a>
-					&nbsp;<a href="<?echo $arOffer["ADD_URL"]?>" rel="nofollow"><?echo GetMessage("CT_BCE_CATALOG_ADD")?></a>
-					</noindex>
-				<?endif;?>
-			<?elseif(count($arResult["CAT_PRICES"]) > 0):?>
-				<?=GetMessage("CATALOG_NOT_AVAILABLE")?>
-				<?$APPLICATION->IncludeComponent("bitrix:sale.notice.product", ".default", array(
-					"NOTIFY_ID" => $arOffer['ID'],
-					"NOTIFY_URL" => htmlspecialcharsback($arOffer["SUBSCRIBE_URL"]),
-					"NOTIFY_USE_CAPTHA" => "N"
-					),
-					$component
-				);?>
-			<?endif?>
-			</p>
-		<?endforeach;?>
-	<?else:?>
-
-	<?endif*/?>
 
 <?if ($arResult["DETAIL_TEXT"] || $arResult["PREVIEW_TEXT"]):?>
 <div class="detail_item_description open" >
@@ -294,13 +173,6 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 
 </div>
 
-
-
-
-
-
-
-
 <script type="text/javascript">
 	app.setPageTitle({"title" : "<?=CUtil::JSEscape(htmlspecialcharsback($arResult["NAME"]))?>"});
 	function showPhoto(arPhotos, descr)
@@ -314,6 +186,37 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 			"photos": photos
 		});
 	}
+</script>
+<?php
+$arJSParams = array(
+	'UNIT' => $productUnit,
+	'UNIT_COEFFICIENT' => $arResult['UNIT_COEFFICIENT'],
+    'CONTAINER' => $strObName,
+    'SITE_ID' => $component->getSiteId(),
+    'CONFIGURATION' => array(
+        'OFFERS_PROPS_FILTER' => $arParams['OFFER_TREE_PROPS'],
+        'PRODUCT_PROPS_TO_SHOW' => $arParams['PROPERTY_CODE'],
+        'OFFERS_PROPS_TO_SHOW' => $arParams['OFFER_TREE_PROPS'],
+    ),
+    'QUANTITY_ITERATION' => $stepIterationQuantity,
+    'DEFAULT_QUANTITY' => $defaultQuantity,
+    'IS_BIND_OFFER' => $arResult['IS_BIND_OFFER'],
+    'PRODUCT_ID' => $arResult['ID'],
+    'PRODUCT_SECT_ID' => $arResult['IBLOCK_SECTION_ID'],
+    'OFFERS' => $arResult['OFFERS'],
+    'OFFERS_PROPS' => $arResult['SKU_PROPS'],
+    'OFFER_ID_SELECTED' => $arResult['OFFER_ID_SELECTED'],
+    'OFFERS_COLORS' => $arResult['COLLECTION_COLOR'],
+    'IS_AUTHORIZED' => $USER->IsAuthorized(),
+);
+?>
+<script type="text/javascript">
+	BX.message({
+		TITLE_PRICE_GET_INFO: 'цену уточняйте',
+		SITE_ID: '<?php echo SITE_ID; ?>'
+	});
+
+	var container<?=$strObName; ?> = new App.Shop.CatalogElement(<?=CUtil::PhpToJSObject($arJSParams); ?>);
 </script>
 
 
