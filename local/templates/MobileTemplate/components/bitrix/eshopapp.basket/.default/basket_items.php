@@ -54,36 +54,43 @@ CJSCore::Init(array("jquery"));
                         } ?>
 					<?endif; ?>
 					<?
-					#echo '<pre>'.print_r($arBasketItems, true).'</pre>';
+					if(count($arBasketItems['OFFERS']['PROPS']) > 0){
 					?>
-					<!--<div class="basket-item-block-properties">
-						<div class="basket-item-property basket-item-property-scu-text" data-entity="basket-item-sku-block">
-							<div class="basket-item-property-name">Крупа</div>
+					<div class="basket-item-block-properties" data-entity="sku-block" id="itemProps-<?=$arBasketItems['ID']?>" data-basket-id="<?=$arBasketItems['ID']?>">
+						<?foreach($arBasketItems['OFFERS']['PROPS'] as $code=>$arProperties){?>
+						<div class="basket-item-property basket-item-property-scu-text" data-entity="basket-item-sku-block" data-property="<?=$code;?>">
+							<div class="basket-item-property-name"><?=$arResult['PROPERTIES'][$arBasketItems['IBLOCK_ID']][$code];?></div>
 							<div class="basket-item-property-value">
 								<ul class="basket-item-scu-list">
-									<li class="basket-item-scu-item" title="Мультизлаковая" data-entity="basket-item-sku-field" data-initial="false" data-value-id="Мультизлаковая" data-sku-name="Мультизлаковая" data-property="KRUPA">
-										<span class="basket-item-scu-item-inner">Мультизлаковая 2</span>
-									</li>
-									<li class="basket-item-scu-item" title="Мультизлаковая" data-entity="basket-item-sku-field" data-initial="false" data-value-id="Мультизлаковая" data-sku-name="Мультизлаковая" data-property="KRUPA">
-										<span class="basket-item-scu-item-inner">Мультизлаковая 1</span>
-									</li>
+									<?foreach($arProperties as $propertyEnumId=>$propertyName){
+										$selected = '';
+										$arProp = $arResult['JS_PARAMS']['PROPS'][$arBasketItems['ID']][$arBasketItems['PRODUCT_ID']];
+										if($arProp[$code] == $propertyEnumId) {
+											$selected = ' active';
+										}
+										?>
+										<li class="basket-item-scu-item<?=$selected;?>" title="<?=$propertyName;?>" data-entity="basket-item-sku-field" data-value-id="<?=$propertyEnumId;?>" data-sku-name="<?=$propertyName;?>" data-property="<?=$code;?>">
+											<span class="sku-prop-value basket-item-scu-item-inner"><?=$propertyName;?></span>
+										</li>
+									<?}?>
 								</ul>
 							</div>
 						</div>
+						<?}?>
 					</div>
-					-->
+					<?}?>
 
                     <?
                     if (in_array("PRICE", $arParams["COLUMNS_LIST"])):?>
                         <?
                         if (doubleval($arBasketItems["FULL_PRICE"]) > 0):?>
                             <div class="cart_price_conteiner oldprice whsnw">
-                                <span class="item_price"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
+                                <span class="item_price" id="itemPrice-<?=$arBasketItems['ID']?>"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
                                 <span class="item_price_old"><?= $arBasketItems["FULL_PRICE_FORMATED"] ?></span>
                             </div>
                         <? else:?>
                             <div class="cart_price_conteiner whsnw">
-                                <span class="item_price"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
+                                <span class="item_price" id="itemPrice-<?=$arBasketItems['ID']?>"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
                             </div>
                         <?endif ?>
                     <?endif; ?>

@@ -174,6 +174,9 @@ if ($_REQUEST["ajax_get_page"] == "Y")
 
 		"PRICE_VAT_INCLUDE" => $arParams["PRICE_VAT_INCLUDE"],
 		"USE_PRODUCT_QUANTITY" => $arParams['USE_PRODUCT_QUANTITY'],
+		'LABEL_PROP' => $arParams['LABEL_PROP'],
+        'ADD_PICT_PROP' => $arParams['ADD_PICT_PROP'],
+        'PRODUCT_DISPLAY_MODE' => $arParams['PRODUCT_DISPLAY_MODE'],
 
 		"DISPLAY_TOP_PAGER" => $arParams["DISPLAY_TOP_PAGER"],
 		"DISPLAY_BOTTOM_PAGER" => $arParams["DISPLAY_BOTTOM_PAGER"],
@@ -183,7 +186,7 @@ if ($_REQUEST["ajax_get_page"] == "Y")
 		"PAGER_DESC_NUMBERING" => $arParams["PAGER_DESC_NUMBERING"],
 		"PAGER_DESC_NUMBERING_CACHE_TIME" => $arParams["PAGER_DESC_NUMBERING_CACHE_TIME"],
 		"PAGER_SHOW_ALL" => $arParams["PAGER_SHOW_ALL"],
-
+		
 		"OFFERS_CART_PROPERTIES" => $arParams["OFFERS_CART_PROPERTIES"],
 		"OFFERS_FIELD_CODE" => $arParams["LIST_OFFERS_FIELD_CODE"],
 		"OFFERS_PROPERTY_CODE" => $arParams["LIST_OFFERS_PROPERTY_CODE"],
@@ -197,6 +200,8 @@ if ($_REQUEST["ajax_get_page"] == "Y")
 		"DETAIL_URL" => $arResult["FOLDER"].$arResult["URL_TEMPLATES"]["element"],
 		'CONVERT_CURRENCY' => $arParams['CONVERT_CURRENCY'],
 		'CURRENCY_ID' => $arParams['CURRENCY_ID'],
+		'OFFER_TREE_PROPS' => $arParams['OFFER_TREE_PROPS'],
+		'PRODUCT_PROPERTIES' => $arParams['PRODUCT_PROPERTIES'],
 	),
 	$component
 );

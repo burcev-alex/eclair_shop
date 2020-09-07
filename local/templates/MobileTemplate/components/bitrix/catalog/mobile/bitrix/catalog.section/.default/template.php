@@ -29,24 +29,21 @@ CJSCore::Init(array("jquery"));
             }
             ?>
             <table style="width: 100%;">
-                <tr>
+                <tr class="wrapper-flex">
                     <td style="max-width: 70px;">
                         <? if (is_array($arElement["PREVIEW_PICTURE"])): ?>
                             <a href="<?= $arElement["DETAIL_PAGE_URL"] ?>" class="item_list_img"><span><img
                                             src="<?= $arElement["PREVIEW_PICTURE"]["SRC"] ?>"
                                             alt="<?= $arElement["NAME"] ?>"
-                                            title="<?= $arElement["NAME"] ?>"/></span></a>
+                                            title="<?= $arElement["NAME"] ?>" id="galleryBigImages-<?=$arElement["ID"];?>"/></span></a>
                         <? elseif (is_array($arElement["DETAIL_PICTURE"])): ?>
                             <a href="<?= $arElement["DETAIL_PAGE_URL"] ?>" class="item_list_img"><span><img
                                             src="<?= $arElement["DETAIL_PICTURE"]["SRC"] ?>"
                                             alt="<?= $arElement["NAME"] ?>"
-                                            title="<?= $arElement["NAME"] ?>"/></span></a>
+                                            title="<?= $arElement["NAME"] ?>" id="galleryBigImages-<?=$arElement["ID"];?>"/></span></a>
                         <? endif ?>
                     </td>
                     <td style="width: 100%; padding-left: 10px;">
-
-                        <!--                        <span class="item_list_title_lable">-->
-                        <? //= $sticker ?><!--</span>-->
                         <div class="item_list_title">
                             <a href="<?= $arElement["DETAIL_PAGE_URL"] ?>"><?= $arElement["NAME"] ?><? if ($sticker): ?><? endif ?></a>
                         </div>
@@ -65,14 +62,61 @@ CJSCore::Init(array("jquery"));
                                 </ul>
                             </div>
                         <? endif ?>
+
+						<div class="product-item-info-container" id="itemProps-<?= $arElement["ID"] ?>" data-entity="sku-block" data-entity-id="<?= $arElement["ID"] ?>">
+							<?
+							$firstElement = $arResult["JS_PARAMS"]["ITEMS"][$arElement["ID"]]["OFFERS"][$arElement["OFFER_ID_SELECTED"]]["FILTER_PROPS"];
+
+							foreach ($arResult['SKU_PROPS'] as $skuProperty) {
+
+								$propertyId = $skuProperty['ID'];
+								$skuProperty['NAME'] = htmlspecialcharsbx($skuProperty['NAME']);
+								if (!isset($arElement['SKU_TREE_VALUES'][$propertyId])) {
+									continue;
+								}
+								?>
+								<div class="row product-item-scu-container" data-entity="sku-line-block">
+									<div class="leftCol"><?= $skuProperty['NAME']; ?>:</div>
+									<div class="rightCol" data-code="<?= $skuProperty['CODE']; ?>">
+										<div class="item-scu-values">
+											<?
+											#echo '<pre>'.print_r($arElement['SKU_TREE_VALUES'], true).'</pre>';
+											foreach ($skuProperty['VALUES'] as $key => $value) {
+												if (!isset($arElement['SKU_TREE_VALUES'][$propertyId][$value['ID']]))
+													continue;
+
+												$value['NAME'] = htmlspecialcharsbx($value['NAME']);
+
+												?>
+												<div class="product-item-scu-item product-item-scu-item-color-container<?
+													if ($firstElement[$skuProperty['CODE']]['VALUE_ENUM_ID'] == $value['ID']) echo ' active'; ?>" data-treevalue="<?= $propertyId ?>_<?= $value['ID'] ?>" data-onevalue="<?= $value['ID'] ?>">
+														<div class="color-circle sku-prop-value<?if ($firstElement[$skuProperty['CODE']]['VALUE_ENUM_ID'] == $value['ID']) echo ' active'; ?>" data-title="<?= $value['NAME'] ?>"><?= $value['NAME'] ?></div>
+													</div>
+												<?
+											}
+											?>
+										</div>
+									</div>
+								</div>
+								<?
+							}
+							?>
+							<div class="row">
+								<a class="linkBtn urlDetailPage-<?= $arElement["ID"] ?> uk-button clear"
+								href="<?= $url ?>"><?= GetMessage("CT_BCS_TPL_MESS_BTN_DETAIL"); ?></a>
+							</div>
+						</div>
+
                         <div class="itemlist_price_container">
-                            <? if (!is_array($arElement["OFFERS"]) || empty($arElement["OFFERS"])): ?>
+							<? if (!is_array($arElement["OFFERS"]) || empty($arElement["OFFERS"])){?>
                                 <? foreach ($arElement["PRICES"] as $code => $arPrice): ?>
                                     <? if ($arPrice["CAN_ACCESS"]): ?>
-                                        <span class="item_price"><?= $arPrice["PRINT_VALUE"] ?></span>
+                                        <span class="item_price" id="itemPrice-<?=$arElement["ID"];?>"><?= $arPrice["PRINT_VALUE"] ?></span>
                                     <? endif; ?>
                                 <? endforeach; ?>
-                            <? endif ?>
+							<?} else{ ?>
+							<span class="item_price" id="itemPrice-<?=$arElement["ID"];?>"></span>
+							<?}?>
 
                             <form action="<?= POST_FORM_ACTION_URI ?>" id="quantity_form_<? echo $arElement["ID"] ?>"
                                   style="display: inline-block;"
@@ -81,32 +125,7 @@ CJSCore::Init(array("jquery"));
                                 <input type="hidden" name="<? echo $arParams["ACTION_VARIABLE"] ?>" value="ADD2BASKET">
                                 <input type="hidden" name="<? echo $arParams["PRODUCT_ID_VARIABLE"] ?>"
                                        value="<? echo $arElement["ID"] ?>">
-                                <a class="main_item_buy button_red_small" ontouchstart="BX.toggleClass(this, 'active');"
-                                   ontouchend="BX.toggleClass(this, 'active');" href="javascript:void(0)" onclick="
-                                        BX.addClass(BX.findParent(this, {class : 'detail_item'}, false), 'add2cart');
-                                        app.onCustomEvent('onItemBuy', {});
-                                        let self = $(this);
-                                        BX.ajax({
-                                        timeout:   30,
-                                        method:   'POST',
-                                        url:       '<?= CUtil::JSEscape(POST_FORM_ACTION_URI) ?>&ELEMENT_ID=<? echo $arElement["ID"] ?>',
-                                        processData: false,
-                                        data: {
-                                            <? echo $arParams["ACTION_VARIABLE"] ?>: 'ADD2BASKET',
-                                            <? echo $arParams["PRODUCT_ID_VARIABLE"] ?>: '<? echo $arElement["ID"] ?>',
-                                            <? echo $arParams["PRODUCT_QUANTITY_VARIABLE"] ?>: $('#item_quantity_<? echo $arElement["ID"] ?>').val()
-                                        },
-                                        onsuccess: function(reply){
-                                            self.hide();
-                                            self.parent().find('.section_key_cartlink').css('display', 'inline-block');
-                                        },
-                                        onfailure: function(){
-                                        }
-
-                                        });
-
-                                        return BX.PreventDefault(event);
-                                        ">
+                                <a id="itemButtonBasket-<? echo $arElement["ID"] ?>" data-offer="<? echo $arElement["ID"] ?>" data-product="<? echo $arElement["ID"] ?>" class="main_item_buy button_red_small" data-action="add_basket" ontouchstart="BX.toggleClass(this, 'active');" ontouchend="BX.toggleClass(this, 'active');" href="javascript:void(0)">
                                     <? echo GetMessage("CATALOG_BUY") ?>
                                 </a>
                                 <a class="section_key_cartlink button_yellow_small" href="/eshop_app/personal/cart/" rel="nofollow">В корзине</a>
@@ -148,6 +167,16 @@ CJSCore::Init(array("jquery"));
         ?>
     </ul>
 </div>
+
+<script type="text/javascript">
+	BX.message({
+		SITE_ID: '<? echo SITE_ID; ?>',
+		POST_ACTION_URI: '<? echo CUtil::JSEscape(POST_FORM_ACTION_URI);?>'
+	});
+</script>
+<script type="text/javascript">
+	var containerCatalogSection = new App.Shop.CatalogSection(<?php echo json_encode($arResult["JS_PARAMS"]);?>, <?php echo json_encode($arResult['IMPORTANT_OFFERS']);?>);
+</script>
 
 <script type="text/javascript">
     app.setPageTitle({"title": "<?=CUtil::JSEscape(htmlspecialcharsback($arResult["NAME"]))?>"});

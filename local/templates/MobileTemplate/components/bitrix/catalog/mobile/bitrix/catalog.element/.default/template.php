@@ -26,7 +26,7 @@ $strObName = 'obCatalogElement';
 			<!-- <span class="detail_item_img_lupe"></span> -->
 		</div>
 	<?endif;?>
-	<h2 class="detail_item_title">
+		<h2 class="detail_item_title">
 			<a href="<?=$arResult["DETAIL_PAGE_URL"]?>" title="<?=$arResult["NAME"]?>"><?=$arResult["NAME"]?></a>
 			<?if ($sticker):?><br/><span style="color:#9b0000; font-size: 14px;"><?=$sticker?></span><?endif?>
 		</h2>
