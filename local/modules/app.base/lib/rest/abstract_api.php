@@ -45,6 +45,8 @@ abstract class Api
 
 	protected $request = array();
 
+	protected $headers = array();
+
 	/**
 	 * Allow for CORS, assemble and pre-process the data
 	 *
@@ -75,6 +77,8 @@ abstract class Api
 				throw new \Exception("Unexpected Header");
 			}
 		}
+
+		$this->headers = $this->header();
 
 		switch ($this->method) {
 			case 'DELETE':
@@ -142,7 +146,9 @@ abstract class Api
 		} elseif ((empty($this->content)) && ($this->method == "POST")) {
 			return $this->response(array("error" => "Content is do not found"), 400);
 		} elseif (method_exists($this, $this->endpoint)) {
-			return $this->response($this->{$this->endpoint}($this->args));
+			$data = $this->{$this->endpoint}($this->args);
+			$httpStatus = $data['status']=="error"?400:200;
+			return $this->response($data, $httpStatus);
 		}
 
 		$resultMessage = array("error" => "Method: $this->endpoint not found");

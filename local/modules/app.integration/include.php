@@ -14,7 +14,6 @@ IncludeModuleLangFile(__FILE__);
 
 $arClassBase = array(
     // rest client
-    '\App\Integration\Rest\Client\Web' => 'lib/rest/client/web.php',
     '\App\Integration\Rest\Client\Crm' => 'lib/rest/client/crm.php',
     '\App\Integration\Rest\Client\AbstractBase' => 'lib/rest/client/abstractBase.php',
 

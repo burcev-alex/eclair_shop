@@ -30,11 +30,11 @@ class Main extends Rest\Api
 
 		$this->apiKey = Config\Option::get('app.integration', 'server_rest_api');
 
-		if (!array_key_exists('apiKey', $this->request)) {
-			throw new \Exception('No API Key provided');
-		} elseif ($this->apiKey != $this->request['apiKey']) {
-			throw new \Exception('Invalid API Key');
-		}
+		if (!array_key_exists('x-apikey', $this->headers)) {
+            throw new \Exception('No API Key provided');
+        } elseif ($this->apiKey != $this->headers['x-apikey']) {
+            throw new \Exception('Invalid API Key');
+        }
 
 		$this->init();
 	}
@@ -51,24 +51,27 @@ class Main extends Rest\Api
 	}
 
 	/**
-	 * Тестовый запрос
-	 *
-	 * @return array
-	 */
-	protected function test()
-	{
-		if ($this->method == 'GET') {
-			return array(
-				'status' => 'success',
-				'data' => ["message" => "Hello world!"]
-			);
-		} else {
-			return array(
-				'status' => 'error',
-				'data' => ["message" => "Only accepts GET requests"]
-			);
-		}
-	}
+     * Тестовый запрос
+     *
+     * @return array
+     */
+    protected function test()
+    {
+        if ($this->method == 'GET') {
+            return [
+                'status' => 'success',
+                'data' => [
+                    'message' => 'Hello world!',
+                    'header' => $this->headers,
+                ],
+            ];
+        } else {
+            return [
+                'status' => 'error',
+                'data' => ['message' => 'Only accepts GET requests'],
+            ];
+        }
+    }
 
 	/**
 	 * Добавление товара

@@ -40,8 +40,8 @@ class Crm extends Rest\Client\AbstractBase
 		);
 
 		if(strlen($this->token) > 0){
-			$option['headers']['X-Service-Token'] = $this->token;
-			$option['headers']['XServiceAuthor'] = $userId;
+			$option['headers']['X-ApiKey'] = $this->token;
+			$option['headers']['X-ServiceAuthor'] = $userId;
 			#$option['headers']['content_type'] = 'application/json;charset=utf-8';
 		}
 
@@ -49,17 +49,17 @@ class Crm extends Rest\Client\AbstractBase
 	}
 
 	/**
-	 * Отправка запроса на создание обращения
+	 * Отправка заказа
 	 *
 	 * @param $data
 	 *
 	 * @return array|mixed
 	 * @throws \Exception
 	 */
-	public function feedback($data)
+	public function order($data)
 	{
 		$response_json = array();
-		$method = "feedback/";
+		$method = "order/";
 		$method .= "?apiKey=".$this->token;
 
 		$requestString = json_encode($data); // JSON_UNESCAPED_UNICODE
