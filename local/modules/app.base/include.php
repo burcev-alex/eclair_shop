@@ -63,6 +63,6 @@ $pathJs = Tools::getPathForStatic().'/js/'.MODULE_ID;
     'app_route',
     [
         'js' => Tools::getPathForStatic().'/js/route.js',
-        'rel' => ['app', 'sidepanel']
+        'rel' => ['app']
     ]
 );

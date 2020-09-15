@@ -20,5 +20,8 @@ class Event
 	protected static function setupEventHandlers()
 	{
 		$eventManager = Main\EventManager::getInstance();
+
+		// sale
+	    $eventManager->addEventHandler('sale', 'OnSaleOrderSaved', ['\App\Integration\Handlers\Order', 'onSaleOrderSaved']);
 	}
 }

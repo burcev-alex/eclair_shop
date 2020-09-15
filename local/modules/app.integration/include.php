@@ -21,6 +21,8 @@ $arClassBase = array(
 	'\App\Integration\Rest\Server\Main' => 'lib/rest/server/main.php',
 
 	// handlers
+	'\App\Integration\Handlers\Order' => 'lib/handlers/order.php',
+
 	'\App\Integration\Event' => 'lib/event.php',
 	'\App\Integration\Tools' => 'lib/tools.php',
 );

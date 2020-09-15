@@ -13,7 +13,7 @@ use App\Integration\Rest;
 Loc::loadMessages(__FILE__);
 
 /**
- * Работа c шиной 1C
+ * Работа c шиной CRM
  * Class Crm
  */
 class Crm extends Rest\Client\AbstractBase
@@ -51,16 +51,21 @@ class Crm extends Rest\Client\AbstractBase
 	/**
 	 * Отправка заказа
 	 *
+	 * @param $action
 	 * @param $data
 	 *
 	 * @return array|mixed
 	 * @throws \Exception
 	 */
-	public function order($data)
+	public function order($action, $data)
 	{
+		$id = 0;
+		if($action != "add"){
+			$id = $data['id'];
+		}
+		
 		$response_json = array();
-		$method = "order/";
-		$method .= "?apiKey=".$this->token;
+		$method = "order/".$id."/".$action."/";
 
 		$requestString = json_encode($data); // JSON_UNESCAPED_UNICODE
 
