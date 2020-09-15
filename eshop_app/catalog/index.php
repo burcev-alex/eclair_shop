@@ -94,7 +94,7 @@ $APPLICATION->SetTitle('');
         'LIST_META_DESCRIPTION' => '-',
         'LIST_META_KEYWORDS' => '-',
         'LIST_OFFERS_FIELD_CODE' => ['', ''],
-        'LIST_OFFERS_LIMIT' => '5',
+        'LIST_OFFERS_LIMIT' => '100',
         'LIST_PROPERTY_CODE' => [
 			0 => 'MANUFACTURER',
 			1 => 'MATERIAL', 

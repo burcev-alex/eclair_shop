@@ -393,8 +393,6 @@ if (!empty($arResult['ITEMS']))
 
 						$propId = $arSKUPropList[$propCode]['ID'];
 						$value = $arMatrix[$keyOffer][$propCode]['VALUE'];
-						#echo '<pre>'.print_r($arMatrix[$keyOffer], true).'</pre>';
-						#echo '<pre>'.print_r($propCode, true).'</pre>';
 						
 						if (!isset($arItem['SKU_TREE_VALUES'][$propId])){
 							$arItem['SKU_TREE_VALUES'][$propId] = array();

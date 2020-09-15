@@ -82,8 +82,9 @@ CJSCore::Init(array("jquery"));
 											<?
 											#echo '<pre>'.print_r($arElement['SKU_TREE_VALUES'], true).'</pre>';
 											foreach ($skuProperty['VALUES'] as $key => $value) {
-												if (!isset($arElement['SKU_TREE_VALUES'][$propertyId][$value['ID']]))
+												if (!isset($arElement['SKU_TREE_VALUES'][$propertyId][$value['ID']])){
 													continue;
+												}
 
 												$value['NAME'] = htmlspecialcharsbx($value['NAME']);
 
