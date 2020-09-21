@@ -82,9 +82,31 @@ class Main extends Rest\Api
 	{
 		if ($this->method == 'POST') {
 
-			$resource = $this->request;
+			if(array_key_exists('request', $this->request)){
+				$resource = $this->request['request'];
+
+				$tmp = explode("/", $resource);
+
+				$method = $tmp[0];
+				$id = $tmp[1];
+				$action = $tmp[2];
+			}
+			else{
+				$method = $this->content['params']['method'];
+				$id = $this->content['params']['id'];
+				$action = $this->content['params']['action'];
+			}
 			
-			$guid = randString(12);
+			$service = new Union\Services\Element();
+			if($action == "add"){
+				$guid = $service->save($this->content);
+			}
+			else if($action == "update"){
+				$guid = $service->save($this->content);
+			}
+			else if($action == "delete"){
+				$guid = $service->delete($this->content);
+			}
 
 			$arData['status'] = "success";
 			$arData['data'] = [
