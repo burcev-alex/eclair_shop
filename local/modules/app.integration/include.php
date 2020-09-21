@@ -23,6 +23,11 @@ $arClassBase = array(
 	// handlers
 	'\App\Integration\Handlers\Order' => 'lib/handlers/order.php',
 
+	// services
+	'\App\Integration\Services\Section' => 'lib/services/section.php',
+	'\App\Integration\Services\Property' => 'lib/services/property.php',
+	'\App\Integration\Services\Element' => 'lib/services/element.php',
+
 	'\App\Integration\Event' => 'lib/event.php',
 	'\App\Integration\Tools' => 'lib/tools.php',
 );

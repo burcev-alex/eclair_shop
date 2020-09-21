@@ -87,7 +87,6 @@ class Order
 
         $endpoint = new Integration\Rest\Client\Crm();
 		$response = $endpoint->order("add", $fields);
-		p2f($response);
 
         return true;
     }

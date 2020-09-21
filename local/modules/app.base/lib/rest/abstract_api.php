@@ -234,6 +234,16 @@ abstract class Api
 			$result = getallheaders();
 		}
 
+		foreach($result as $key=>$value){
+			if(substr_count(strtolower($key), "x-") > 0){
+				$newKey = strtolower($key);
+				$newValue = $value;
+				unset($result[$key]);
+
+				$result[$newKey] = $newValue;
+			}
+		}
+
 		return $result;
 	}
 
@@ -252,7 +262,7 @@ abstract class Api
 		$body = htmlspecialchars_decode(trim($phpInput));
 
 		if($this->isJson($body)){
-			$result = json_decode($body);
+			$result = json_decode($body, true);
 		}
 		else{
 			try {
