@@ -3,7 +3,8 @@ require($_SERVER["DOCUMENT_ROOT"]."/eshop_app/headers.php");
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Заказы");
 ?>
-<?$APPLICATION->IncludeComponent("bitrix:eshopapp.order.ajax", "mobile", array(
+<?
+$APPLICATION->IncludeComponent("bitrix:sale.order.ajax", "", array(
 	"PAY_FROM_ACCOUNT" => "Y",
 	"COUNT_DELIVERY_TAX" => "N",
 	"COUNT_DISCOUNT_4_ALL_QUANTITY" => "N",
@@ -23,4 +24,7 @@ $APPLICATION->SetTitle("Заказы");
 	"SHOW_ACCOUNT_NUMBER" => "Y"
 	),
 	false
-);?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);
+?>
+
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
