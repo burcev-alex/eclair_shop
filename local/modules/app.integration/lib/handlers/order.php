@@ -24,6 +24,30 @@ class Order
      *
      * @throws \Bitrix\Main\ArgumentNullException
      */
+    public static function onSalePayOrder($ID, $val)
+    {
+        Loader::includeModule('iblock');
+        Loader::includeModule('sale');
+
+		// передача запроса в CRM
+        $fields = [
+            'id' => $ID,
+            'payed' => ($val == 'Y') ? 1 : 0
+        ];
+
+        $endpoint = new Integration\Rest\Client\Crm();
+		$response = $endpoint->order('add', $fields);
+
+        return true;
+	}
+
+    /**
+     * Вызывается после добавления заказа.
+     *
+     * @return bool
+     *
+     * @throws \Bitrix\Main\ArgumentNullException
+     */
     public static function onSaleOrderSaved(Main\Event $event)
     {
         Loader::includeModule('iblock');
@@ -90,7 +114,8 @@ class Order
             'discoutPrice' => $order->getDiscountPrice(),
             'currency' => $order->getCurrency(),
             'basket' => $arrBaskets,
-            'property' => $propertyCollection->getArray(),
+			'property' => $propertyCollection->getArray(),
+			'comments' => $order->getField("USER_DESCRIPTION"),
             'profile' => [
                 'fullName' => $propertyValues['FIO']['VALUE'],
                 'email' => $propertyValues['EMAIL']['VALUE'],

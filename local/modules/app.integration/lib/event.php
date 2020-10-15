@@ -23,5 +23,6 @@ class Event
 
 		// sale
 	    $eventManager->addEventHandler('sale', 'OnSaleOrderSaved', ['\App\Integration\Handlers\Order', 'onSaleOrderSaved']);
+	    $eventManager->addEventHandler('sale', 'OnSalePayOrder', ['\App\Integration\Handlers\Order', 'onSalePayOrder']);
 	}
 }
