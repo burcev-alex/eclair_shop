@@ -22,14 +22,21 @@ class Element
     {
         $xmlId = $data['ID'];
 
-        $el = new \CIBlockElement();
+		$el = new \CIBlockElement();
 
         $parentSectionId = false;
         if (intval($data['IBLOCK_SECTION_ID']) > 0) {
             $rsSect = \CIBlockElement::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $data['IBLOCK_SECTION_ID']]);
             while ($arSect = $rsSect->Fetch()) {
                 $parentSectionId = $arSect['ID'];
-            }
+			}
+			
+			if (intval($parentSectionId) > 0) {
+				$rsSect = \CIBlockElement::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'ID' => $data['IBLOCK_SECTION_ID']]);
+				while ($arSect = $rsSect->Fetch()) {
+					$parentSectionId = $arSect['ID'];
+				}
+			}
         }
 
         $arProperties = [];
