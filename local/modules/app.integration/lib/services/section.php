@@ -20,21 +20,37 @@ class Section
 
     public function save($data)
     {
+		\CModule::IncludeModule('iblock');
+		
         $xmlId = $data['ID'];
 
         $bs = new \CIBlockSection();
 
-        $parentSectionId = false;
-        if (IntVal($data['IBLOCK_SECTION_ID']) > 0) {
-            $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['XML_ID' => $data['IBLOCK_SECTION_ID']]);
+		$parentSectionId = false;
+        if (intval($data['IBLOCK_SECTION_ID']) > 0) {
+            $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $data['IBLOCK_SECTION_ID']]);
             while ($arSect = $rsSect->Fetch()) {
                 $parentSectionId = $arSect['ID'];
             }
-        }
+
+            if (! $parentSectionId) {
+                $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'ID' => $data['IBLOCK_SECTION_DATA']['XML_ID']]);
+                while ($arSect = $rsSect->Fetch()) {
+                    $parentSectionId = $arSect['ID'];
+                }
+            }
+
+            if (! $parentSectionId) {
+                $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'CODE' => $data['IBLOCK_SECTION_DATA']['CODE']]);
+                while ($arSect = $rsSect->Fetch()) {
+                    $parentSectionId = $arSect['ID'];
+                }
+            }
+		}
 
         $arFields = [
             'ACTIVE' => $data['ACTIVE'],
-            'XML_ID' => $data['ID'],
+            'XML_ID' => $data['XML_ID'],
             'IBLOCK_SECTION_ID' => $parentSectionId,
             'IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'],
             'NAME' => $data['NAME'],
@@ -48,11 +64,11 @@ class Section
 
         if (strlen($data['PICTURE']) > 0) {
             $arFields['PICTURE'] = \CFile::MakeFileArray($data['PICTURE']);
-        }
+		}
 
 		$ID = 0;
 		if(IntVal($data['ID']) > 0){
-			$rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['XML_ID' => $data['ID']]);
+			$rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['XML_ID' => $data['XML_ID']]);
 			while ($arSect = $rsSect->Fetch()) {
 				$ID = $arSect['ID'];
 			}
@@ -78,7 +94,7 @@ class Section
         $bs = new \CIBlockSection();
 
         $ID = 0;
-        $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['XML_ID' => $data['ID']]);
+        $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['XML_ID' => $data['XML_ID']]);
         while ($arSect = $rsSect->GetNext()) {
             $ID = $arSect['ID'];
 		}

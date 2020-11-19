@@ -20,28 +20,40 @@ class Element
 
     public function save($data)
     {
+		\CModule::IncludeModule('iblock');
         $xmlId = $data['ID'];
 
-		$el = new \CIBlockElement();
+        $el = new \CIBlockElement();
+
+        if (! array_key_exists('IBLOCK_SECTION_DATA', $data)) {
+            return $xmlId;
+        }
 
         $parentSectionId = false;
-        if (intval($data['IBLOCK_SECTION_ID']) > 0) {
-            $rsSect = \CIBlockElement::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $data['IBLOCK_SECTION_ID']]);
+        if (strlen($data['IBLOCK_SECTION_ID']) > 0) {
+            $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $data['IBLOCK_SECTION_ID']]);
             while ($arSect = $rsSect->Fetch()) {
                 $parentSectionId = $arSect['ID'];
-			}
-			
-			if (intval($parentSectionId) > 0) {
-				$rsSect = \CIBlockElement::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'ID' => $data['IBLOCK_SECTION_ID']]);
-				while ($arSect = $rsSect->Fetch()) {
-					$parentSectionId = $arSect['ID'];
-				}
-			}
+            }
+
+            if (! $parentSectionId) {
+                $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'ID' => $data['IBLOCK_SECTION_DATA']['XML_ID']]);
+                while ($arSect = $rsSect->Fetch()) {
+                    $parentSectionId = $arSect['ID'];
+                }
+            }
+
+            if (! $parentSectionId) {
+                $rsSect = \CIBlockSection::GetList(['id' => 'asc'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'CODE' => $data['IBLOCK_SECTION_DATA']['CODE']]);
+                while ($arSect = $rsSect->Fetch()) {
+                    $parentSectionId = $arSect['ID'];
+                }
+            }
         }
 
         $arProperties = [];
         foreach ($data['PROPERTIES'] as $propertyCode => $propValues) {
-            if (!array_key_exists('PROPERTY_TYPE', $propValues)) {
+            if (! array_key_exists('PROPERTY_TYPE', $propValues)) {
                 foreach ($propValues as $firstValue) {
                     if ($firstValue['PROPERTY_TYPE'] == 'L') {
                         $property_enums = \CIBlockPropertyEnum::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'CODE' => $propertyCode]);
@@ -51,10 +63,19 @@ class Element
                             }
                         }
                     } elseif ($firstValue['PROPERTY_TYPE'] == 'E') {
-                        $value = $firstValue['VALUE'];
-                        $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $firstValue['VALUE']], false, false, ['ID']);
-                        if ($arBindElement = $rsBindElement->Fetch()) {
-                            $value = $arBindElement['ID'];
+						$value = $firstValue['VALUE'];
+						// TODO hard code
+                        $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'XML_ID' => $firstValue['VALUE']], false, false, ['ID']);
+                        if (IntVal($rsBindElement->AffectedRowsCount()) > 0) {
+                            if ($arBindElement = $rsBindElement->Fetch()) {
+                                $value = $arBindElement['ID'];
+                            }
+                        } else {
+							// TODO hard code
+                            $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'EXTERNAL_ID' => $firstValue['VALUE']], false, false, ['ID']);
+                            if ($arBindElementOther = $rsBindElementOther->Fetch()) {
+                                $value = $arBindElementOther['ID'];
+                            }
                         }
                         $arProperties[$propertyCode][] = $value;
                     } else {
@@ -70,10 +91,19 @@ class Element
                         }
                     }
                 } elseif ($propValues['PROPERTY_TYPE'] == 'E') {
-                    $arProperties[$propertyCode] = $propValues['VALUE'];
-                    $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => $data['IBLOCK_EXTERNAL_ID'], 'XML_ID' => $propValues['VALUE']], false, false, ['ID']);
-                    while ($arBindElement = $rsBindElement->Fetch()) {
-                        $arProperties[$propertyCode] = $arBindElement['ID'];
+					$arProperties[$propertyCode] = $propValues['VALUE'];
+					// TODO hard code
+                    $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'XML_ID' => $propValues['VALUE']], false, false, ['ID']);
+                    if (IntVal($rsBindElement->AffectedRowsCount()) > 0) {
+                        while ($arBindElement = $rsBindElement->Fetch()) {
+                            $arProperties[$propertyCode] = $arBindElement['ID'];
+                        }
+                    } else {
+						// TODO hard code
+                        $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'EXTERNAL_ID' => $propValues['VALUE']], false, false, ['ID']);
+                        while ($arBindElementOther = $rsBindElementOther->Fetch()) {
+                            $arProperties[$propertyCode] = $arBindElementOther['ID'];
+                        }
                     }
                 } else {
                     $arProperties[$propertyCode] = $propValues['VALUE'];
@@ -102,7 +132,7 @@ class Element
             'DETAIL_TEXT_TYPE' => $data['DETAIL_TEXT_TYPE'],
             'TAGS' => $data['TAGS'],
             'PROPERTY_VALUES' => $arProperties,
-        ];
+		];
 
         if (strlen($data['PREVIEW_PICTURE']) > 0) {
             $arFields['PREVIEW_PICTURE'] = \CFile::MakeFileArray($data['PREVIEW_PICTURE']);
@@ -118,48 +148,47 @@ class Element
             while ($arElement = $rsElement->Fetch()) {
                 $ID = $arElement['ID'];
             }
-        }
+		}
 
         if ($ID > 0) {
             $res = $el->Update($ID, $arFields);
         } else {
             $ID = $el->Add($arFields);
 		}
-
+		
         if (intval($ID) == 0) {
             $xmlId = 0;
         } else {
-			$arFieldsProduct = array(
-				"ID" => $ID, 
-				"QUANTITY" => 1000,
-				"QUANTITY_TRACE" => "N",
-				"CAN_BUY_ZERO" => "Y"
-			);
-			\CCatalogProduct::Add($arFieldsProduct);
+            $arFieldsProduct = [
+                'ID' => $ID,
+                'QUANTITY' => 1000,
+                'QUANTITY_TRACE' => 'N',
+                'CAN_BUY_ZERO' => 'Y'
+            ];
+            \CCatalogProduct::Add($arFieldsProduct);
 
             $arFieldsPrice = [
                 'PRODUCT_ID' => $ID,
                 'CATALOG_GROUP_ID' => 1,
                 'PRICE' => $data['PRICE']['PRICE'],
                 'CURRENCY' => $data['PRICE']['CURRENCY']
-			];
+            ];
 
             $resPrice = \CPrice::GetList(
-                    [],
-                    [
-						'PRODUCT_ID' => $ID,
-						'CATALOG_GROUP_ID' => 1,
-					]
-                );
+                [],
+                [
+                    'PRODUCT_ID' => $ID,
+                    'CATALOG_GROUP_ID' => 1,
+                ]
+            );
 
             if ($arrPrice = $resPrice->Fetch()) {
                 \CPrice::Update($arrPrice['ID'], $arFieldsPrice);
             } else {
+                \CPrice::Add($arFieldsPrice);
+            }
 
-				\CPrice::Add($arFieldsPrice);
-			}
-			
-			\CPrice::SetBasePrice($ID, $data['PRICE']['PRICE'], $data['PRICE']['CURRENCY']);
+            \CPrice::SetBasePrice($ID, $data['PRICE']['PRICE'], $data['PRICE']['CURRENCY']);
         }
 
         return $xmlId;
