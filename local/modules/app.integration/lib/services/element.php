@@ -130,9 +130,12 @@ class Element
             'PREVIEW_TEXT_TYPE' => $data['PREVIEW_TEXT_TYPE'],
             'DETAIL_TEXT' => $data['DETAIL_TEXT'],
             'DETAIL_TEXT_TYPE' => $data['DETAIL_TEXT_TYPE'],
-            'TAGS' => $data['TAGS'],
-            'PROPERTY_VALUES' => $arProperties,
+            'TAGS' => $data['TAGS']
 		];
+
+		if(count($arProperties) > 0){
+			$arFields['PROPERTY_VALUES'] = $arProperties;
+		}
 
         if (strlen($data['PREVIEW_PICTURE']) > 0) {
             $arFields['PREVIEW_PICTURE'] = \CFile::MakeFileArray($data['PREVIEW_PICTURE']);
