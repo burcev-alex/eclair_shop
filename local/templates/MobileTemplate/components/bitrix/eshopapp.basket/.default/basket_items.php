@@ -5,6 +5,18 @@ CJSCore::Init(array("jquery"));
     <div class="cart_item_list">
         <div class="cart_item_list_top_container">
             <a href="javascript:void(0)" class="bedit cart_item_list_filter_button" onclick="changeMode()"></a>
+            <!--		<ul>-->
+            <!--			<li class="current"><a href="javascript:void(0)">-->
+            <? //=GetMessage("SALE_PRD_IN_BASKET_ACT")?><!-- <span class="cart-item-title">(-->
+            <? //=count($arResult["ITEMS"]["AnDelCanBuy"])?><!--)</span></a></li>-->
+            <!--			<li ontouchstart="ShowBasketItems(2);"><a href="javascript:void(0)">-->
+            <? //=GetMessage("SALE_PRD_IN_BASKET_SHELVE")?><!-- <span class="delay-item-title">(-->
+            <? //=count($arResult["ITEMS"]["DelDelCanBuy"])?><!--)</span></a></li>-->
+            <? /*
+			<?if ($countItemsSubscribe=count($arResult["ITEMS"]["ProdSubscribe"])):?><a href="javascript:void(0)" onclick="ShowBasketItems(3);" class="sortbutton"><?=GetMessage("SALE_PRD_IN_BASKET_SUBSCRIBE")?> (<?=$countItemsSubscribe?>)</a><?endif?>
+			<?if ($countItemsNotAvailable=count($arResult["ITEMS"]["nAnCanBuy"])):?><a href="javascript:void(0)" onclick="ShowBasketItems(4);" class="sortbutton"><?=GetMessage("SALE_PRD_IN_BASKET_NOTA")?> (<?=$countItemsNotAvailable?>)</a><?endif?>
+			*/ ?>
+            <!--		</ul>-->
             <div class="clb"></div>
         </div>
 
@@ -52,45 +64,32 @@ CJSCore::Init(array("jquery"));
                             </div>
                             <?
                         } ?>
-					<?endif; ?>
-					<?
-					if(count($arBasketItems['OFFERS']['PROPS']) > 0){
-					?>
-					<div class="basket-item-block-properties" data-entity="sku-block" id="itemProps-<?=$arBasketItems['ID']?>" data-basket-id="<?=$arBasketItems['ID']?>">
-						<?foreach($arBasketItems['OFFERS']['PROPS'] as $code=>$arProperties){?>
-						<div class="basket-item-property basket-item-property-scu-text" data-entity="basket-item-sku-block" data-property="<?=$code;?>">
-							<div class="basket-item-property-name"><?=$arResult['PROPERTIES'][$arBasketItems['IBLOCK_ID']][$code];?></div>
-							<div class="basket-item-property-value">
-								<ul class="basket-item-scu-list">
-									<?foreach($arProperties as $propertyEnumId=>$propertyName){
-										$selected = '';
-										$arProp = $arResult['JS_PARAMS']['PROPS'][$arBasketItems['ID']][$arBasketItems['PRODUCT_ID']];
-										if($arProp[$code] == $propertyEnumId) {
-											$selected = ' active';
-										}
-										?>
-										<li class="basket-item-scu-item<?=$selected;?>" title="<?=$propertyName;?>" data-entity="basket-item-sku-field" data-value-id="<?=$propertyEnumId;?>" data-sku-name="<?=$propertyName;?>" data-property="<?=$code;?>">
-											<span class="sku-prop-value basket-item-scu-item-inner"><?=$propertyName;?></span>
-										</li>
-									<?}?>
-								</ul>
-							</div>
-						</div>
-						<?}?>
-					</div>
-					<?}?>
+                    <?endif; ?>
+                    <?/*if (in_array("VAT", $arParams["COLUMNS_LIST"])):?>
+				<td><?=$arBasketItems["VAT_RATE_FORMATED"]?></td>
+			<?endif;?>
+			<?if (in_array("TYPE", $arParams["COLUMNS_LIST"])):?>
+				<td><?=$arBasketItems["NOTES"]?></td>
+			<?endif;?>
+			<?if (in_array("DISCOUNT", $arParams["COLUMNS_LIST"])):?>
+				<td><?=$arBasketItems["DISCOUNT_PRICE_PERCENT_FORMATED"]?></td>
+			<?endif;?>
+			<?if (in_array("WEIGHT", $arParams["COLUMNS_LIST"])):?>
+				<td><?=$arBasketItems["WEIGHT_FORMATED"]?></td>
+			<?endif;*/
+                    ?>
 
                     <?
                     if (in_array("PRICE", $arParams["COLUMNS_LIST"])):?>
                         <?
                         if (doubleval($arBasketItems["FULL_PRICE"]) > 0):?>
                             <div class="cart_price_conteiner oldprice whsnw">
-                                <span class="item_price" id="itemPrice-<?=$arBasketItems['ID']?>"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
+                                <span class="item_price"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
                                 <span class="item_price_old"><?= $arBasketItems["FULL_PRICE_FORMATED"] ?></span>
                             </div>
                         <? else:?>
                             <div class="cart_price_conteiner whsnw">
-                                <span class="item_price" id="itemPrice-<?=$arBasketItems['ID']?>"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
+                                <span class="item_price"><?= $arBasketItems["PRICE_FORMATED"] ?></span>
                             </div>
                         <?endif ?>
                     <?endif; ?>

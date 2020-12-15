@@ -1,0 +1,32 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"Каталог",
+		"/catalog/zavtraki/",
+		Array(),
+		Array(),
+		""
+	),
+	Array(
+		"Оплата", 
+		"/payment/", 
+		Array(),
+		Array(),
+		"" 
+	),
+	Array(
+		"Доставка", 
+		"/delivery/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Пользовательское соглашение", 
+		"/agreement/", 
+		Array(), 
+		Array(), 
+		"" 
+	)
+);
+?>

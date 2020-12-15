@@ -1,37 +1,6 @@
-# files
-.DS_Store
-Thumbs.db
-*.tar.gz*
-/restore.php
-*.js.orig
-*.js.base
-*.php.orig
-*.php.base
-*.css.orig
-*.css.base
-/log.txt
-/1-dump.html
-/*-dump.html
-/test/
-/.idea/
-/.vscode/
-# core
-/.htaccess
-/upload/*
-/bitrix/*
-/redisadmin/*
-
-#new ignore
-/phpmyadmin/
-/local/tests/_output/
-/local/tests/_data/
-/local/tests/selenium-server/
+bitrix/cache
+bitrix/managed_cache
+bitrix/stack_cache
+bitrix/.settings.php
+bitrix/php_interface
 /local/vendor/
-/log.txt
-/test*.php
-log.htm
-/tests
-/codeception.*
-/composer.*
-/tr.php
-/exceptions.log

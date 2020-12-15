@@ -106,6 +106,7 @@ class Order
         // передача запроса в CRM
         $fields = [
             'id' => $order->getId(),
+            'siteid' => $order->getSiteId(),
             'statusId' => $order->getField('STATUS_ID'),
             'price' => $order->getPrice(),
             'priceDelivery' => $order->getDeliveryPrice(),
@@ -116,6 +117,7 @@ class Order
             'basket' => $arrBaskets,
 			'property' => $propertyCollection->getArray(),
 			'comments' => $order->getField("USER_DESCRIPTION"),
+			'paymentId' => $order->getField("PAY_SYSTEM_ID"),
             'profile' => [
                 'fullName' => $propertyValues['FIO']['VALUE'],
                 'email' => $propertyValues['EMAIL']['VALUE'],
@@ -128,7 +130,7 @@ class Order
 
         $endpoint = new Integration\Rest\Client\Crm();
         $response = $endpoint->order('add', $fields);
-
+        p2log($response,'order');
         return true;
     }
 }

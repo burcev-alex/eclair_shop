@@ -65,7 +65,8 @@ $APPLICATION->SetPageProperty("BodyClass", "main");
                 <span></span>
             </a>
 
-            <a href="/eshop_app/catalog/" class="main_button_catalog">Меню<span></span></a>
+            <a href="javascript:void(0)" class="main_button_catalog"
+               onclick="openSectionList();">Меню<span></span></a>
             <div class="clb"></div>
         </div>
 

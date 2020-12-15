@@ -1,13 +1,15 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("");
-global $sectionsFilter;
+global $arrFilter;
 $arrFilter = [
-    '!SECTION_ID' => 27
+    '!IBLOCK_SECTION_ID' => 27
 ];
-
-?><?
 $APPLICATION->IncludeComponent(
+    "strizhi:catalog.mainpage",
+    ".default",
+    array());
+?><?/*$APPLICATION->IncludeComponent(
 	"bitrix:catalog.section",
 	".default",
 	array(
@@ -22,8 +24,8 @@ $APPLICATION->IncludeComponent(
 		"AJAX_OPTION_JUMP" => "N",
 		"AJAX_OPTION_STYLE" => "Y",
 		"BACKGROUND_IMAGE" => "-",
-		"BASKET_URL" => "/personal/cart/",
-		"BROWSER_TITLE" => "-",
+		"BASKET_URL" => "/personal/basket.php",
+		"BROWSER_TITLE" => "Эклер",
 		"CACHE_FILTER" => "N",
 		"CACHE_GROUPS" => "Y",
 		"CACHE_TIME" => "36000000",
@@ -36,10 +38,10 @@ $APPLICATION->IncludeComponent(
 		"DISPLAY_BOTTOM_PAGER" => "N",
 		"DISPLAY_COMPARE" => "N",
 		"DISPLAY_TOP_PAGER" => "N",
-		"ELEMENT_SORT_FIELD" => "SECTION_ID",
-		"ELEMENT_SORT_FIELD2" => "sort",
+		"ELEMENT_SORT_FIELD" => "id",
+		"ELEMENT_SORT_FIELD2" => "id",
 		"ELEMENT_SORT_ORDER" => "asc",
-		"ELEMENT_SORT_ORDER2" => "asc",
+		"ELEMENT_SORT_ORDER2" => "desc",
 		"ENLARGE_PRODUCT" => "STRICT",
 		"FILTER_NAME" => "arrFilter",
 		"HIDE_NOT_AVAILABLE" => "Y",
@@ -51,7 +53,7 @@ $APPLICATION->IncludeComponent(
 		),
 		"LAZY_LOAD" => "Y",
 		"LINE_ELEMENT_COUNT" => "3",
-		"LOAD_ON_SCROLL" => "Y",
+		"LOAD_ON_SCROLL" => "N",
 		"MESSAGE_404" => "",
 		"MESS_BTN_ADD_TO_BASKET" => "В корзину",
 		"MESS_BTN_BUY" => "Купить",
@@ -92,7 +94,7 @@ $APPLICATION->IncludeComponent(
 		"RCM_PROD_ID" => $_REQUEST["PRODUCT_ID"],
 		"RCM_TYPE" => "personal",
 		"SECTION_CODE" => "",
-		"SECTION_ID" => $_REQUEST["SECTION_ID"],
+		"SECTION_ID" => [],
 		"SECTION_ID_VARIABLE" => "SECTION_ID",
 		"SECTION_URL" => "",
 		"SECTION_USER_FIELDS" => array(
@@ -128,4 +130,6 @@ $APPLICATION->IncludeComponent(
 		"MESS_BTN_LAZY_LOAD" => "Eщё"
 	),
 	false
-);?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
+);*/
+
+?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

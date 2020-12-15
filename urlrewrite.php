@@ -1,74 +1,83 @@
 <?php
-
-$arUrlRewrite = [
-  0 => [
+$arUrlRewrite=array (
+  0 => 
+  array (
     'CONDITION' => '#^\\/?\\/mobileapp/jn\\/(.*)\\/.*#',
     'RULE' => 'componentName=$1',
-    'ID' => null,
+    'ID' => NULL,
     'PATH' => '/bitrix/services/mobileapp/jn.php',
     'SORT' => 100,
-  ],
-  2 => [
+  ),
+  10 => 
+  array (
+    'CONDITION' => '#^/ajax/[A-Za-z0-9_-]+/\\??.*$#',
+    'RULE' => '',
+    'ID' => '',
+    'PATH' => '/local/modules/app.base/ajax/index.php',
+    'SORT' => 100,
+  ),
+  2 => 
+  array (
     'CONDITION' => '#^/bitrix/services/ymarket/#',
     'RULE' => '',
     'ID' => '',
     'PATH' => '/bitrix/services/ymarket/index.php',
     'SORT' => 100,
-  ],
-  5 => [
+  ),
+  5 => 
+  array (
     'CONDITION' => '#^/personal/order/#',
     'RULE' => '',
     'ID' => 'bitrix:sale.personal.order',
     'PATH' => '/personal/order/index.php',
     'SORT' => 100,
-  ],
-  6 => [
+  ),
+  6 => 
+  array (
     'CONDITION' => '#^/personal/#',
     'RULE' => '',
     'ID' => 'bitrix:sale.personal.section',
     'PATH' => '/personal/index.php',
     'SORT' => 100,
-  ],
-  8 => [
+  ),
+  11 => 
+  array (
     'CONDITION' => '#^/catalog/#',
     'RULE' => '',
     'ID' => 'bitrix:catalog',
     'PATH' => '/catalog/index.php',
     'SORT' => 100,
-  ],
-  7 => [
+  ),
+  9 => 
+  array (
+    'CONDITION' => '#^/api/v1/#',
+    'RULE' => 'request=$1',
+    'ID' => '',
+    'PATH' => '/api/v1/server.php',
+    'SORT' => 100,
+  ),
+  7 => 
+  array (
     'CONDITION' => '#^/store/#',
     'RULE' => '',
     'ID' => 'bitrix:catalog.store',
     'PATH' => '/store/index.php',
     'SORT' => 100,
-  ],
-  1 => [
+  ),
+  1 => 
+  array (
     'CONDITION' => '#^/rest/#',
     'RULE' => '',
-    'ID' => null,
+    'ID' => NULL,
     'PATH' => '/bitrix/services/rest/index.php',
     'SORT' => 100,
-  ],
-  3 => [
+  ),
+  3 => 
+  array (
     'CONDITION' => '#^/news/#',
     'RULE' => '',
     'ID' => 'bitrix:news',
     'PATH' => '/news/index.php',
     'SORT' => 100,
-  ],
-  9 => [
-        'CONDITION' => '#^/api/v1/#',
-        'RULE' => 'request=$1',
-        'ID' => '',
-        'PATH' => '/api/v1/server.php',
-        'SORT' => 100,
-    ],
-	10 => [
-        'CONDITION' => '#^/ajax/[A-Za-z0-9_-]+/\\??.*$#',
-        'RULE' => '',
-        'ID' => '',
-        'PATH' => '/local/modules/app.base/ajax/index.php',
-        'SORT' => 100,
-    ],
-];
+  ),
+);

@@ -74,7 +74,7 @@ class Rights
         return [
             $this->module_id,
             $this->file,
-            filemtime($this->file)
+        //    filemtime($this->file)
         ];
     }
 

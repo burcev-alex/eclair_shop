@@ -155,6 +155,13 @@
 				{
 					BX('all_discount').innerHTML = '';
 				}
+				<?if (in_array("WEIGHT", $arParams["COLUMNS_LIST"])):?>
+					BX('weight').innerHTML = json.weight;
+					<?endif?>
+				<?if ($arParams['PRICE_VAT_SHOW_VALUE'] == 'Y'):?>
+					BX('vat_excluded').innerHTML = json.vat_excluded;
+					BX('vat_included').innerHTML = json.vat_included;
+				<?endif?>
 			},
 			onfailure: function(){
 			}
@@ -237,16 +244,6 @@
 			include($_SERVER["DOCUMENT_ROOT"].$templateFolder."/basket_items_notavail.php"); */
 		?>
 	</form>
-
-	<script type="text/javascript">
-		BX.message({
-			SITE_ID: '<? echo SITE_ID; ?>',
-			POST_ACTION_URI: '<? echo CUtil::JSEscape(POST_FORM_ACTION_URI);?>'
-		});
-	</script>
-	<script type="text/javascript">
-		var containerBaskets = new App.Shop.Baskets(<?php echo json_encode($arResult["JS_PARAMS"]);?>);
-	</script>
 <?
 /*}
 else

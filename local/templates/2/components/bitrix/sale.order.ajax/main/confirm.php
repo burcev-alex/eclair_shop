@@ -23,11 +23,7 @@ if ($arParams["SET_TITLE"] == "Y")
 					"#ORDER_DATE#" => $arResult["ORDER"]["DATE_INSERT"]->toUserTime()->format('d.m.Y H:i'),
 					"#ORDER_ID#" => $arResult["ORDER"]["ACCOUNT_NUMBER"]
 				))?>
-				<? if (!empty($arResult['ORDER']["PAYMENT_ID"])): ?>
-					<?=Loc::getMessage("SOA_PAYMENT_SUC", array(
-						"#PAYMENT_ID#" => $arResult['PAYMENT'][$arResult['ORDER']["PAYMENT_ID"]]['ACCOUNT_NUMBER']
-					))?>
-				<? endif ?>
+
 				<? if ($arParams['NO_PERSONAL'] !== 'Y'): ?>
 					<br /><br />
 					<?=Loc::getMessage('SOA_ORDER_SUC1', ['#LINK#' => $arParams['PATH_TO_PERSONAL']])?>
@@ -55,7 +51,15 @@ if ($arParams["SET_TITLE"] == "Y")
 						{
 							?>
 							<br /><br />
-
+<style>
+    body .mainpart a.linktopayorder {
+        font-weight: bold;
+        border: 1px solid;
+        border-radius: 11px;
+        padding: 6px;
+        color: red;
+    }
+</style>
 							<table class="sale_order_full_table">
 								<tr>
 									<td class="ps_logo">

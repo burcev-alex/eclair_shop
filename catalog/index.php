@@ -1,6 +1,7 @@
 <?
 define("HIDE_SIDEBAR", true);
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+$APPLICATION->SetPageProperty("description", "Доставка блюд от Еclair Cafe. Завтраки из разных стран мира, Бизнес Ланчи, ужины, фитнес меню, авторские торты и пирожные из натуральных ингредиентов. Доставка на дом или в офис всегда вовремя.");
 $APPLICATION->SetTitle("");
 ?><div class="container">
 	 <?$APPLICATION->IncludeComponent(
@@ -63,6 +64,9 @@ $APPLICATION->SetTitle("");
 			14 => "GAS",
 			15 => "CAKES_SET",
 			16 => "PIROGI_SET",
+			17 => "FRESH_BERRY",
+			18 => "VIPECHKA",
+			19 => "GARNIR",
 		),
 		"DETAIL_META_DESCRIPTION" => "-",
 		"DETAIL_META_KEYWORDS" => "-",
@@ -70,6 +74,7 @@ $APPLICATION->SetTitle("");
 			0 => "NAME",
 			1 => "CML2_LINK",
 			2 => "ADDINGS",
+			3 => "",
 		),
 		"DETAIL_PRODUCT_INFO_BLOCK_ORDER" => "sku,props",
 		"DETAIL_PRODUCT_PAY_BLOCK_ORDER" => "rating,price,priceRanges,quantityLimit,quantity,buttons",

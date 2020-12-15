@@ -18,7 +18,7 @@ $arMobileMenuItems = array(
 			array(
 				"text" => "Каталог",
 				"class" => "menu-item",
-				"data-url" => SITE_DIR."eshop_app/catalog/",
+				"onclick" => "openSectionList();",
 				"data-pageid" => "catalog",
 				"id" => "catalog"
 			),

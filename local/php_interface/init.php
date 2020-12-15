@@ -1,8 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/wsrubi.smtp/classes/general/wsrubismtp.php';
 
-require_once $_SERVER['DOCUMENT_ROOT'].'/local/lib/IblockElementPropertyTable.php';
-require_once $_SERVER['DOCUMENT_ROOT'].'/local/lib/CSms4bBase.php';
+include_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/wsrubi.smtp/classes/general/wsrubismtp.php");
+
+require_once ($_SERVER["DOCUMENT_ROOT"]."/local/lib/IblockElementPropertyTable.php");
+require_once ($_SERVER["DOCUMENT_ROOT"]."/local/lib/CSms4bBase.php");
 
 define('LOG_FILENAME', $_SERVER['DOCUMENT_ROOT'].'/log.txt');
 
@@ -105,60 +106,133 @@ if (! function_exists('pr')) {
     }
 }
 
-AddEventHandler('sale', 'OnOrderAdd', 'OnOrderAddHandler');
+AddEventHandler("iblock", "OnAfterIBlockElementAdd", "OnAfterIBlockElementAddHandler");
 
-function OnOrderAddHandler(&$arFields)
-{
-    //отправка SMS
-    if (isset($arFields['ORDER_PROP'][3])) {
-        $phone = $arFields['ORDER_PROP'][3];
-    } else {
-        $phone = '';
-    }
-    sendSMS($phone, $arFields['PRICE']);
-}
+function OnAfterIBlockElementAddHandler($fields) {
 
-function sendSMS($phone, $price)
-{
-    $LOGIN = 'Abramova';
-    $PASSWORD = '1cbit-abramova';
+    if($fields["IBLOCK_ID"] == 7){
+        global $USER;
+        $res = \CIBlockElement::GetList([],["ID"=>$fields["ID"]],false,false,["ID", "IBLOCK_ID",'PROPERTY_PHONE','PROPERTY_FILE','PROPERTY_TYPE']);
+        if($ar_res = $res->GetNext())
+            $arFields = $ar_res;
+            $arFields['FILE'] = '';
+            $arFields['PHONE'] = $arFields["PROPERTY_PHONE_VALUE"];
+            if($arFields["PROPERTY_FILE_VALUE"]){
+                $arFields['FILE'] = '<a href="https://sweet-eclair.ru'.CFile::GetPath($arFields["PROPERTY_FILE_VALUE"]).'">Ссылка на файл</a>';
+            }
 
-    $messagePers = 'Новый заказ на сайте Eclair Cafe';
-    $SMS4B = new \Csms4bBase($LOGIN, $PASSWORD);
-
-    if (strlen($phone) > 0) {
-        $messageclient = 'Ваш заказ принят. Сумма заказа '.$price.'. Мы свяжемся с вами в ближайшее время';
-        $smsResult = $SMS4B->SendSMS($messageclient, $phone, 'ECLAIR CAFE');
+        $arFields= array_merge($arFields,$fields);
+        CEvent::Send("NEW_ORDER_SWEET", "s2", $arFields);
     }
 
-    $smsResult = $SMS4B->SendSMS($messagePers, '79833235321', 'ECLAIR CAFE');
-    $smsResult = $SMS4B->SendSMS($messagePers, '79831242541', 'ECLAIR CAFE');
-    $smsResult = $SMS4B->SendSMS($messagePers, '79130190362', 'ECLAIR CAFE');
-    $smsResult = $SMS4B->SendSMS($messagePers, '79134761496', 'ECLAIR CAFE');
-    $smsResult = $SMS4B->SendSMS($messagePers, '79529053533', 'ECLAIR CAFE');
 }
 
-function show($arr)
+function sendByWhatsApp($phone, $msg)
 {
-    print '<pre>';
-    print_r($arr);
-    print '</pre>';
-}
+    $phone = trim($phone, '+');
+    $phone[0] = 7;
 
-/*
-Bitrix\Main\EventManager::getInstance()->addEventHandler(
-    'sale',
-    'onSaleDeliveryRestrictionsClassNamesBuildList',
-    'myDeliveryFunction'
-);
+    $msg = str_replace('"', '\'', $msg);
+    // Отправка текста
+    $url = 'https://new39066241.wazzup24.com/api/v1.1/send_message';
+    // echo $msg;
+   $data = "
+    {
+    \"transport\": \"whatsapp\",
+    \"from\": \"79659994622\",
+    \"to\": \"$phone\",
+    \"text\": \"$msg\"
+    }";
 
-function myDeliveryFunction()
-{
-    return new \Bitrix\Main\EventResult(
-        \Bitrix\Main\EventResult::SUCCESS,
-        array(
-            '\MyDeliveryRestriction' => '/local/php_interface/include/mydelrestriction.php',
+
+    $options = array(
+        'http' => array(
+            'method' => 'POST',
+            'content' => $data,
+            'header' => "Content-type: application/json\r\n" .
+                "Authorization: 400811b478d64879af044f086e7ba021\r\n"
         )
     );
+    $context  = stream_context_create( $options );
+    $result = file_get_contents( $url, false, $context );
+    $response = json_decode( $result );
+
+  /*  $headers = array(
+        "Content-type: application/json",
+        "Authorization: 400811b478d64879af044f086e7ba021"
+
+    );
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_POST, 1);
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    $html = curl_exec($ch);
+
+    curl_close($ch);
+    var_dump($html);*/
 }
-*/
+function sendSMS($phone,$price){
+        $LOGIN = 'Abramova';
+        $PASSWORD = '1cbit-abramova';
+
+        $messagePers = 'Новый заказ на сайте Eclair Cafe';
+        $SMS4B = new \Csms4bBase($LOGIN,$PASSWORD);
+
+        if(strlen($phone) > 0){
+              $messageclient = 'Ваш заказ принят. Сумма заказа '.$price.'. Мы свяжемся с вами в ближайшее время';
+            $smsResult = $SMS4B->SendSMS($messageclient,$phone,'ECLAIR CAFE');
+          
+        }
+
+        $smsResult = $SMS4B->SendSMS($messagePers,"79833235321",'ECLAIR CAFE');
+        $smsResult = $SMS4B->SendSMS($messagePers,"79831242541",'ECLAIR CAFE');
+        $smsResult = $SMS4B->SendSMS($messagePers,"79130190362",'ECLAIR CAFE');
+        $smsResult = $SMS4B->SendSMS($messagePers,"79134761496",'ECLAIR CAFE');
+        $smsResult = $SMS4B->SendSMS($messagePers,"79529053533",'ECLAIR CAFE');
+}
+
+
+function generate_string($strength = 16) {
+    $input = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $input_length = strlen($input);
+    $random_string = '';
+    for($i = 0; $i < $strength; $i++) {
+        $random_character = $input[mt_rand(0, $input_length - 1)];
+        $random_string .= $random_character;
+    }
+
+    return $random_string;
+}
+
+function sendByWA($phone,$price){
+
+
+        $messagePers = 'Новый заказ на сайте Eclair Cafe';
+
+
+        if(strlen($phone) > 0){
+              $messageclient = 'Ваш заказ принят. Сумма заказа '.$price.'. Мы свяжемся с вами в ближайшее время';
+            sendByWhatsApp($phone,$messageclient);
+
+        }
+    sendByWhatsApp("79833235321",$messagePers.' '.generate_string(2));
+    sendByWhatsApp("79831242541",$messagePers.' '.generate_string(2));
+    sendByWhatsApp("79130190362",$messagePers.' '.generate_string(2));
+    sendByWhatsApp("79134761496",$messagePers.' '.generate_string(2));
+    sendByWhatsApp("79529053533",$messagePers.' '.generate_string(2));
+    sendByWhatsApp("79132465068",$messagePers.' '.generate_string(2));
+}
+
+function show($arr){
+    print '<pre>';
+        print_r($arr);
+    print '</pre>';
+}
