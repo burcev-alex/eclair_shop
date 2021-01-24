@@ -5,49 +5,40 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 $APPLICATION->SetPageProperty("BodyClass", "main");
 ?>
 
-    <div>
-        <img width="100%" src="<?= SITE_TEMPLATE_PATH ?>/images/head_logo.png">
+    <div class="banner flex">
+        <h4>Всё самое вкусное </h4>
+        <span>с доставкой на дом</span>
     </div>
-<?
 
-//$APPLICATION->IncludeComponent(
-//	"bitrix:eshopapp.top",
-//	"slider",
-//	Array(
-//		"IBLOCK_TYPE_ID" => "catalog",
-//		"IBLOCK_ID" => "4",
-//		"ELEMENT_SORT_FIELD" => "RAND",
-//		"ELEMENT_SORT_ORDER" => "asc",
-//		"ELEMENT_COUNT" => "2",
-//		"FLAG_PROPERTY_CODE" => "SPECIALOFFER",
-//		"OFFERS_LIMIT" => "5",
-//		"ACTION_VARIABLE" => "action",
-//		"PRODUCT_ID_VARIABLE" => "id_top",
-//		"PRODUCT_QUANTITY_VARIABLE" => "quantity",
-//		"PRODUCT_PROPS_VARIABLE" => "prop",
-//		"CATALOG_FOLDER" => SITE_DIR."eshop_app/catalog/",
-//		//"SECTION_ID_VARIABLE" => "SECTION_ID",
-//		"CACHE_TYPE" => "A",
-//		"CACHE_TIME" => "180",
-//		"CACHE_GROUPS" => "Y",
-//		"DISPLAY_COMPARE" => "N",
-//		"PRICE_CODE" => array(0=>"BASE",),
-//		"USE_PRICE_COUNT" => "N",
-//		"SHOW_PRICE_COUNT" => "1",
-//		"PRICE_VAT_INCLUDE" => "Y",
-//		"DISPLAY_IMG_WIDTH" => "180",
-//		"DISPLAY_IMG_HEIGHT" => "180",
-//		"PRODUCT_PROPERTIES" => array(),
-//		"BASKET_URL" => SITE_DIR."eshop_app/personal/cart/",
-//		"CONVERT_CURRENCY" => "N",
-//		"VARIABLE_ALIASES" => array(
-//			"SECTION_ID" => "SECTION_ID",
-//			"ELEMENT_ID" => "ELEMENT_ID",
-//		)
-//	)
-//);
+    <div class="selectBlock">
+        <select class="select">
+            <option value="1">Меню</option>
+            <option value="2">Меню 2</option>
+            <option value="3">Меню 3</option>
+        </select>
+    </div>
 
-?>
+    <!--start itemBlock -->
+    <section class="itemBlock">
+    <div class="itemBlockIn">
+        <div class="itemBlock__title flex"><span>Завтраки</span></div>
+        <div class="content">
+            <div class="item">
+                <a href="#" class="item__images">
+                    <img src="images/item.jpg" alt="">
+                </a>
+
+                <a href="#" class="item__title">Тропический смузи-боул</a>
+                <span class="item__gram">500 грамм</span>
+
+                <div class="itemPrice flex">
+                    <div class="itemPrice__price">400 ₽</div>
+                    <button type="button" class="itemPrice__plus">+</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div class="maincontent_component">
         <div class="main_button_component">
