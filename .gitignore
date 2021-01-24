@@ -4,3 +4,5 @@ bitrix/stack_cache
 bitrix/.settings.php
 bitrix/php_interface
 /local/vendor/
+/composer.phar
+.idea/
