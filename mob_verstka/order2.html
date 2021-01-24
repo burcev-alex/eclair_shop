@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content=" " name="description">
+  <meta content=" " name="keywords">
+
+  <title>Оформление заказа</title>
+
+  <link href="css/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="css/selects.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="order">
+  <h1 class="order__title">Оформление заказа</h1>
+
+  <div class="orderRangeMain">
+    <ul class="orderRangeDisc flex">
+      <li>
+        <!-- <span class="orderRange__disc"></span> -->
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__active"></span>
+        <span class="orderRange__disc"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__not"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__not"></span>
+      </li>
+    </ul>
+
+    <ul class="orderRange flex">
+      <li class="orderRange__deliver active">
+        <span class="orderRange__name">Доставка</span>
+      </li>
+    </ul>
+  </div>
+
+  <button type="button" class="orderForm__dateClient flex">Данные клиента</button>
+
+  <form action="#" class="orderForm">
+    <h4 class="orderForm__title">Доставка</h4>
+
+    <div class="orderForm__desc">В разные районы разная минимальная сумма чека для бесплатной доставки.
+      В ином случае стоимость доставки будет составлять 500 рублей.
+    </div>
+
+    <div class="input-row">
+      <input id="radio-input-1" type="radio" value="myValue 1" name="radio-group" checked>
+      <label class="input-helper input-helper--radio" for="radio-input-1"><span class="orderForm__name">Самовывоз
+      </span> <span
+          class="orderForm__free">Бесплатно
+      </span> </label>
+    </div>
+
+    <div class="input-row">
+      <input id="radio-input-2" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-2"><span class="orderForm__name">До станции
+        метро</span> <span
+          class="orderForm__free">Бесплатно
+      </span> </label>
+    </div>
+
+    <div class="input-row">
+      <input id="radio-input-3" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-3"><span class="orderForm__name">Доставка курьером</span>
+        <span
+            class="orderForm__price">+ 500
+        ₽</span> </label>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderForm__select">
+      <div class="selectBlock__title">Выберите район доставки</div>
+      <select class="select">
+        <option value="1">Октябрьский</option>
+        <option value="2">Октябрьский 2</option>
+        <option value="3">Октябрьский 3</option>
+      </select>
+    </div>
+
+    <span class="orderForm__many flex">Бесплатно от 2500 ₽</span>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderForm__input">
+      <label for="street">Улица</label>
+      <input placeholder="Улица" type="text" id="street">
+    </div>
+
+    <div class="orderForm__input">
+      <label for="home">Дом</label>
+      <input placeholder="Дом" type="text" id="home">
+    </div>
+
+    <div class="orderForm__input">
+      <label for="flat">Квартира</label>
+      <input placeholder="Квартира" type="text" id="flat">
+    </div>
+
+    <div class="orderForm__input">
+      <label for="entrance">Подъезд</label>
+      <input placeholder="Квартира" type="text" id="entrance">
+    </div>
+
+
+    <div class="orderForm__input">
+      <label for="floor">Этаж</label>
+      <input placeholder="Этаж" type="text" id="floor">
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="selectBlock__title">Выберите время получения</div>
+
+    <div class="input-row">
+      <input id="radio-input-4" type="radio" value="myValue 1" name="radio-group" checked>
+      <label class="input-helper input-helper--radio" for="radio-input-4"><span class="orderForm__name">Ближайшее
+      </span> </label>
+    </div>
+
+    <div class="input-row input-row__modif">
+      <input id="radio-input-5" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-5"><span class="orderForm__name">Выбрать время</span></label>
+    </div>
+
+    <div class="orderForm__select">
+      <select class="select">
+        <option value="1">Сегодня, 10 ноября</option>
+        <option value="2">Сегодня, 10 ноября</option>
+        <option value="3">Октябрьский 3</option>
+      </select>
+    </div>
+
+
+    <div class="orderForm__select">
+      <select class="select">
+        <option value="1">9:00</option>
+        <option value="2">10:00</option>
+        <option value="3">13:00</option>
+      </select>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderForm__textarea">
+      <div class="selectBlock__title">Выберите время получения</div>
+      <textarea placeholder="Введите коментарий"></textarea>
+    </div>
+
+
+    <hr class="orderForm__hr">
+
+
+    <div class="selectBlock__title">Столовые приборы</div>
+
+    <div class="input-row">
+      <input id="radio-input-6" type="radio" value="myValue 1" name="radio-group" checked>
+      <label class="input-helper input-helper--radio" for="radio-input-6"><span class="orderForm__name">Без приборов
+      </span> </label>
+    </div>
+
+    <div class="input-row input-row__modif">
+      <input id="radio-input-7" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-7"><span class="orderForm__name">Нужны приборы</span></label>
+    </div>
+
+    <div class="orderForm__select">
+      <select class="select">
+        <option value="1">На 2 персоны</option>
+        <option value="2">На 3 персоны</option>
+        <option value="3">На 4 персоны</option>
+      </select>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <button type="submit" class="orderForm__btn">Продолжить</button>
+  </form>
+</div>
+
+<script src="js/jquery-3.4.1.min.js"></script>
+<script src="js/selects.js"></script>
+<script src="js/selectsSetting.js"></script>
+</body>
+</html>
