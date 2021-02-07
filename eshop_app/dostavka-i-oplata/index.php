@@ -1,0 +1,83 @@
+<?
+require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
+$APPLICATION->SetTitle("Доставка и оплата");
+?>
+
+
+<div class="deliver">
+    <h1>Доставка</h1>
+
+    <div class="deliverTime">
+        <p class="deliver__time">Работаем ежедневно с 9:00 до 21:00.</p>
+        <p class="deliver__time">Доставляем до 22:00.</p>
+    </div>
+
+    <div class="deliverTime">
+        <p class="deliver__time">Стоимость доставки по районам</p>
+        <p class="deliver__time">Новосибирска:</p>
+    </div>
+
+    <div class="deliverContent">
+        <div class="deliverItem">
+            <b>Центральный, Железнодорожный</b>
+
+            <span class="deliverItem__price">200 ₽</span>
+            <span class="deliverItem__free"><span>Бесплатно</span> при заказе от 2 000 ₽</span>
+        </div>
+
+        <div class="deliverItem">
+            <b>Октябрьский, Дзержинский, Калининский Заельцовский</b>
+
+            <span class="deliverItem__price">200 ₽</span>
+            <span class="deliverItem__free"><span>Бесплатно</span> при заказе от 2 000 ₽</span>
+        </div>
+
+        <div class="deliverItem">
+            <b>Ленинский</b>
+
+            <span class="deliverItem__price">200 ₽</span>
+            <span class="deliverItem__free"><span>Бесплатно</span> при заказе от 2 000 ₽</span>
+        </div>
+
+        <div class="deliverItem">
+            <b>Кировский</b>
+
+            <span class="deliverItem__price">350 ₽</span>
+            <span class="deliverItem__free"><span>Бесплатно</span> при заказе от 3 000 ₽</span>
+        </div>
+
+        <div class="deliverItem">
+            <b>Советский</b>
+            <b>Первомайский</b>
+
+            <span class="deliverItem__price">500 ₽</span>
+            <span class="deliverItem__free"><span>Бесплатно</span> при заказе от 5 000 ₽</span>
+        </div>
+    </div>
+
+    <div class="payment">
+        <h2>Оплата</h2>
+
+        <div class="paymentContent">
+            <h3>Наличными</h3>
+            <p>Оплата осуществляется наличными курьеру или банковской картой при получении заказа.</p>
+        </div>
+
+
+        <div class="paymentContent">
+            <h3>Картой или переводом по номеру карты</h3>
+            <p>Через терминал или переводом по номеру карты. Через терминал к оплате принимаются пластиковые карты VISA, MasterCard, МИР и Maestro.</p>
+        </div>
+
+
+
+        <div class="paymentContent">
+            <h3>Банковской картой онлайн</h3>
+            <p>Вы будете перенаправлены на платёжный шлюз ПАО СБЕРБАНК. Соединение с платёжным шлюзом и передача информации осуществляется в защищённом режиме с использованием протокола шифрования SSL. В случае если ваш банк поддерживает технологию безопасного проведения интернет-платежей Verified By Visa, MasterCard SecureCode, MIR Accept, J-Secure для проведения платежа также может потребоваться ввод специального пароля.</p>
+
+            <p>Настоящий сайт поддерживает 256-битное шифрование. Конфиденциальность сообщаемой персональной информации обеспечивается ПАО СБЕРБАНК. Введённая информация не будет предоставлена третьим лицам за исключением случаев, предусмотренных законодательством РФ. Проведение платежей по банковским картам осуществляется в строгом соответствии с требованиями платёжных систем МИР, Visa Int., MasterCard Europe Sprl, JCB</p>
+        </div>
+    </div>
+</div>
+
+<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>
