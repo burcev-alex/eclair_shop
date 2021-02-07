@@ -36,13 +36,28 @@ $arMobileMenuItems = array(
 		"text" =>"Информация",
 		"sort" => "200",
 		"items" =>	array(
-			array(
-				"text" => "Контакты",
-				"data-url" => SITE_DIR."eshop_app/about/",
+//			array(
+//				"text" => "Контакты",
+//				"data-url" => SITE_DIR."eshop_app/about/",
+//				"class" => "menu-item",
+//				"id" => "about",
+//				"data-pageid" => "about",
+//			),
+            array(
+				"text" => "Доставка и оплата ",
+				"data-url" => SITE_DIR."eshop_app/dostavka-i-oplata/",
 				"class" => "menu-item",
-				"id" => "about",
-				"data-pageid" => "about",
+				"id" => "dostavka-i-oplata",
+				"data-pageid" => "dostavka-i-oplata",
 			),
+            array(
+				"text" => "Контакты",
+				"data-url" => SITE_DIR."eshop_app/kontakty/",
+				"class" => "menu-item",
+				"id" => "kontakty",
+				"data-pageid" => "kontakty",
+			),
+
 		)
 	)
 );
