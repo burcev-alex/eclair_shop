@@ -8,6 +8,15 @@
     foreach ($arResult["ITEMS"] as $key => $arItem):
         if ($arResult['SECTIONS'][$arItem['IBLOCK_SECTION_ID']] == false)
             continue;
+
+        $offer = false;
+        $preprice = '';
+        if ($arItem["CATALOG_TYPE"] != 1) {
+            $preprice = 'от ';
+            $offer = true;
+        }
+
+
         if (is_array($arItem)) {
             $itr++;
             if ($itr == $page_size) {
@@ -41,18 +50,33 @@
                                     <? if ($numPrices > 1): ?>
                                     <? endif ?>
                                     <? if ($arPrice["DISCOUNT_VALUE"] < $arPrice["VALUE"]): ?>
-                                        <div class="itemPrice__price"><?= $arPrice["PRINT_VALUE"] ?></div>
+                                        <div class="itemPrice__price"><?= $preprice.$arPrice["PRINT_VALUE"] ?></div>
                                     <? else: ?>
-                                        <div class="itemPrice__price"><?= $arPrice["PRINT_VALUE"] ?></div>
+                                        <div class="itemPrice__price"><?= $preprice.$arPrice["PRINT_VALUE"] ?></div>
                                     <?endif;
                                 endif;
                             endforeach;
                             ?>
-
-                            <button type="button" class="itemPrice__plus" onclick="
-						BX.addClass(BX.findParent(this, {class : 'main_catalog_item'}, false), 'add2cart');//	setTimeout('BX.removeClass(obj, \'add2cart\')', 3000);
-						return addItemToCart(this);" id="catalog_add2cart_link_<?= $arItem['ID'] ?>">+
-                            </button>
+                            <?
+                                if ($offer) {
+                            ?>
+                                    <a href="<?= $arItem["DETAIL_PAGE_URL"] ?>" class="itemPrice__plus">
+                                        +
+                                    </a>
+                            <?
+                                } else {
+                            ?>
+                                    <button type="button" class="itemPrice__plus"
+                                       data-elementid="<?= $arItem["ID"] ?>"
+                                       data-price="<?= $arItem["VALUE"] ?>" rel="nofollow"
+                                       onclick="Catalog.toCart(this);return false;">
+                                       +
+                                    </button>
+                            <? } ?>
+<!--                            <button type="button" class="itemPrice__plus" onclick="-->
+<!--						BX.addClass(BX.findParent(this, {class : 'main_catalog_item'}, false), 'add2cart');//	setTimeout('BX.removeClass(obj, \'add2cart\')', 3000);-->
+<!--						return addItemToCart(this);" id="catalog_add2cart_link_--><?//= $arItem['ID'] ?><!--">+-->
+<!--                            </button>-->
                         </div>
                     </noindex>
                 <? endif ?>

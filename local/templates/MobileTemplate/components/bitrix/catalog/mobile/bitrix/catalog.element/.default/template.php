@@ -11,6 +11,7 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 		}
 }
 ?>
+
 <div class="itemSingle flex">
     <div class="itemProducts">
         <div class="itemImages">

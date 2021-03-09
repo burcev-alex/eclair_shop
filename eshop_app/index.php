@@ -4,14 +4,6 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
 $APPLICATION->SetPageProperty("BodyClass", "main");
 ?>
-<?
-$APPLICATION->IncludeComponent("bitrix:sale.basket.basket.small", "basket_small", [
-    "PATH_TO_BASKET" => "/personal/basket/",   // Страница корзины
-    "PATH_TO_ORDER" => "/personal/order/",   // Страница оформления заказа
-],
-    false
-);
-?>
     <div class="banner flex">
         <h4>Всё самое вкусное </h4>
         <span>с доставкой на дом</span>
