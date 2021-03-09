@@ -56,6 +56,6 @@ if ($APPLICATION->GetCurPage(true) != SITE_DIR."eshop_app/personal/cart/index.ph
     <?
 }
 ?>
-<div class="wrap">
+<!--<div class="wrap">-->
     <?
     ?>

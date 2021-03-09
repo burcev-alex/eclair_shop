@@ -1,6 +1,86 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
 <?
 $sticker = "";
+$mainId = $this->GetEditAreaId($arResult['ID']);
+$itemIds = array(
+    'ID' => $mainId,
+    'DISCOUNT_PERCENT_ID' => $mainId.'_dsc_pict',
+    'STICKER_ID' => $mainId.'_sticker',
+    'BIG_SLIDER_ID' => $mainId.'_big_slider',
+    'BIG_IMG_CONT_ID' => $mainId.'_bigimg_cont',
+    'SLIDER_CONT_ID' => $mainId.'_slider_cont',
+    'OLD_PRICE_ID' => $mainId.'_old_price',
+    'PRICE_ID' => $mainId.'_price',
+    'DISCOUNT_PRICE_ID' => $mainId.'_price_discount',
+    'PRICE_TOTAL' => $mainId.'_price_total',
+    'SLIDER_CONT_OF_ID' => $mainId.'_slider_cont_',
+    'QUANTITY_ID' => $mainId.'_quantity',
+    'QUANTITY_DOWN_ID' => $mainId.'_quant_down',
+    'QUANTITY_UP_ID' => $mainId.'_quant_up',
+    'QUANTITY_MEASURE' => $mainId.'_quant_measure',
+    'QUANTITY_LIMIT' => $mainId.'_quant_limit',
+    'BUY_LINK' => $mainId.'_buy_link',
+    'ADD_BASKET_LINK' => $mainId.'_add_basket_link',
+    'BASKET_ACTIONS_ID' => $mainId.'_basket_actions',
+    'NOT_AVAILABLE_MESS' => $mainId.'_not_avail',
+    'COMPARE_LINK' => $mainId.'_compare_link',
+    'TREE_ID' => $mainId.'_skudiv',
+    'DISPLAY_PROP_DIV' => $mainId.'_sku_prop',
+    'DISPLAY_MAIN_PROP_DIV' => $mainId.'_main_sku_prop',
+    'OFFER_GROUP' => $mainId.'_set_group_',
+    'BASKET_PROP_DIV' => $mainId.'_basket_prop',
+    'SUBSCRIBE_LINK' => $mainId.'_subscribe',
+    'TABS_ID' => $mainId.'_tabs',
+    'TAB_CONTAINERS_ID' => $mainId.'_tab_containers',
+    'SMALL_CARD_PANEL_ID' => $mainId.'_small_card_panel',
+    'TABS_PANEL_ID' => $mainId.'_tabs_panel'
+);
+$obName = $templateData['JS_OBJ'] = 'ob'.preg_replace('/[^a-zA-Z0-9_]/', 'x', $mainId);
+$name = !empty($arResult['IPROPERTY_VALUES']['ELEMENT_PAGE_TITLE'])
+    ? $arResult['IPROPERTY_VALUES']['ELEMENT_PAGE_TITLE']
+    : $arResult['NAME'];
+$title = !empty($arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_TITLE'])
+    ? $arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_TITLE']
+    : $arResult['NAME'];
+$alt = !empty($arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_ALT'])
+    ? $arResult['IPROPERTY_VALUES']['ELEMENT_DETAIL_PICTURE_FILE_ALT']
+    : $arResult['NAME'];
+
+$haveOffers = !empty($arResult['OFFERS']);
+if ($haveOffers)
+{
+    $actualItem = isset($arResult['OFFERS'][$arResult['OFFERS_SELECTED']])
+        ? $arResult['OFFERS'][$arResult['OFFERS_SELECTED']]
+        : reset($arResult['OFFERS']);
+    $showSliderControls = false;
+
+    foreach ($arResult['OFFERS'] as $offer)
+    {
+        if ($offer['MORE_PHOTO_COUNT'] > 1)
+        {
+            $showSliderControls = true;
+            break;
+        }
+    }
+}
+else
+{
+    $actualItem = $arResult;
+    $showSliderControls = $arResult['MORE_PHOTO_COUNT'] > 1;
+}
+
+$skuProps = array();
+$price = $actualItem['ITEM_PRICES'][$actualItem['ITEM_PRICE_SELECTED']];
+$measureRatio = $actualItem['ITEM_MEASURE_RATIOS'][$actualItem['ITEM_MEASURE_RATIO_SELECTED']]['RATIO'];
+$showDiscount = $price['PERCENT'] > 0;
+
+$showDescription = !empty($arResult['PREVIEW_TEXT']) || !empty($arResult['DETAIL_TEXT']);
+$showBuyBtn = in_array('BUY', $arParams['ADD_TO_BASKET_ACTION']);
+$buyButtonClassName = in_array('BUY', $arParams['ADD_TO_BASKET_ACTION_PRIMARY']) ? 'btn-default' : 'btn-link';
+$showAddBtn = in_array('ADD', $arParams['ADD_TO_BASKET_ACTION']);
+$showButtonClassName = in_array('ADD', $arParams['ADD_TO_BASKET_ACTION_PRIMARY']) ? 'btn-default' : 'btn-link';
+$showSubscribe = $arParams['PRODUCT_SUBSCRIPTION'] === 'Y' && ($arResult['PRODUCT']['SUBSCRIBE'] === 'Y' || $haveOffers);
+
 if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"]))
 {
 	foreach (Array("SPECIALOFFER", "NEWPRODUCT", "SALELEADER") as $propertyCode)
@@ -11,7 +91,6 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 		}
 }
 ?>
-
 <div class="itemSingle flex">
     <div class="itemProducts">
         <div class="itemImages">
@@ -46,8 +125,16 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
         <a href="#" class="itemProducts__href"><?=$arResult["NAME"]?></a>
 
         <div class="itemSingle__price">800 ₽</div>
+        <div class="itemPlural__desc">
+            <?if($arResult["DETAIL_TEXT"]):?>
+                <?=$arResult["DETAIL_TEXT"]?>
+            <?elseif($arResult["PREVIEW_TEXT"]):?>
+                <?=$arResult["PREVIEW_TEXT"]?>
+            <?endif;?>
+        </div>
     </div>
     <?if(!is_array($arResult["OFFERS"]) || empty($arResult["OFFERS"])):?>
+
         <?foreach($arResult["PRICES"] as $code=>$arPrice):?>
             <?if($arPrice["CAN_ACCESS"]):?>
                 <?//=$arResult["CAT_PRICES"][$code]["TITLE"];?>
@@ -101,6 +188,7 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
                 </div>
 
             <?else:?>
+            2
                 <div class="detail_item_buy_container">
                     <noindex>
                         <a class="detail_item_buykey button_red_medium" ontouchstart="BX.toggleClass(this, 'active');" ontouchend="BX.toggleClass(this, 'active');" href="<?echo $arResult["ADD_URL"]?>" onclick="
@@ -142,209 +230,140 @@ if (array_key_exists("PROPERTIES", $arResult) && is_array($arResult["PROPERTIES"
 			);?>
 		<?*/endif?>
     <?endif;?>
-    <div class="orderForm__amound">
-        <button type="submit" class="orderForm__btn">В корзину 800 ₽</button>
-    </div>
-</div>
-<div style="display: none;">
-<div class="detail_item" style="display: none;">
-	<?if(is_array($arResult["PREVIEW_PICTURE"]) || is_array($arResult["DETAIL_PICTURE"])):?>
-		<div class="detail_item_img_container" <?if (!empty($arResult["PHOTO_GALLERY"])):?>onclick="showPhoto(<?=CUtil::PhpToJsObject($arResult["PHOTO_GALLERY"])?>, '<?=$arResult["NAME"]?>')"<?endif?>>
-			<a class="detail_item_img" href="javascript:void(0)">
-				<?if(is_array($arResult["DETAIL_PICTURE_SMALL"])):?>
-					<img id="catalog_detail_image" src="<?=$arResult["DETAIL_PICTURE_SMALL"]["SRC"]?>" alt="<?=$arResult["NAME"]?>" title="<?=$arResult["NAME"]?>" />
-				<?elseif(is_array($arResult["PREVIEW_PICTURE"])):?>
-					<img id="catalog_detail_image" src="<?=$arResult["PREVIEW_PICTURE"]["SRC"]?>" alt="<?=$arResult["NAME"]?>" title="<?=$arResult["NAME"]?>" />
-				<?endif?>
-			</a>
-			<!-- <span class="detail_item_img_lupe"></span> -->
-		</div>
-	<?endif;?>
-	<h2 class="detail_item_title">
-		<a href="<?=$arResult["DETAIL_PAGE_URL"]?>" title="<?=$arResult["NAME"]?>"><?=$arResult["NAME"]?></a>
-		<?if ($sticker):?><br/><span style="color:#9b0000; font-size: 14px;"><?=$sticker?></span><?endif?>
-	</h2>
 
-
-
-</div>
-
-	<?/*if(is_array($arResult["OFFERS"]) && !empty($arResult["OFFERS"])):/*?>
-		<?foreach($arResult["OFFERS"] as $arOffer):?>
-			<?foreach($arParams["OFFERS_FIELD_CODE"] as $field_code):?>
-				<small><?echo GetMessage("IBLOCK_FIELD_".$field_code)?>:&nbsp;<?
-						echo $arOffer[$field_code];?></small><br />
-			<?endforeach;?>
-			<?foreach($arOffer["DISPLAY_PROPERTIES"] as $pid=>$arProperty):?>
-				<small><?=$arProperty["NAME"]?>:&nbsp;<?
-					if(is_array($arProperty["DISPLAY_VALUE"]))
-						echo implode("&nbsp;/&nbsp;", $arProperty["DISPLAY_VALUE"]);
-					else
-						echo $arProperty["DISPLAY_VALUE"];?></small><br />
-			<?endforeach?>
-			<?foreach($arOffer["PRICES"] as $code=>$arPrice):?>
-				<?if($arPrice["CAN_ACCESS"]):?>
-					<p><?=$arResult["CAT_PRICES"][$code]["TITLE"];?>:&nbsp;&nbsp;
-					<?if($arPrice["DISCOUNT_VALUE"] < $arPrice["VALUE"]):?>
-						<s><?=$arPrice["PRINT_VALUE"]?></s> <span class="catalog-price"><?=$arPrice["PRINT_DISCOUNT_VALUE"]?></span>
-					<?else:?>
-						<span class="catalog-price"><?=$arPrice["PRINT_VALUE"]?></span>
-					<?endif?>
-					</p>
-				<?endif;?>
-			<?endforeach;?>
-			<p>
-			<?if($arParams["DISPLAY_COMPARE"]):?>
-				<noindex>
-				<a href="<?echo $arOffer["COMPARE_URL"]?>" rel="nofollow"><?echo GetMessage("CT_BCE_CATALOG_COMPARE")?></a>&nbsp;
-				</noindex>
-			<?endif?>
-			<?if($arOffer["CAN_BUY"]):?>
-				<?if($arParams["USE_PRODUCT_QUANTITY"]):?>
-					<form action="<?=POST_FORM_ACTION_URI?>" method="post" enctype="multipart/form-data">
-					<table border="0" cellspacing="0" cellpadding="2">
-						<tr valign="top">
-							<td><?echo GetMessage("CT_BCE_QUANTITY")?>:</td>
-							<td>
-								<input type="text" name="<?echo $arParams["PRODUCT_QUANTITY_VARIABLE"]?>" value="1" size="5">
-							</td>
-						</tr>
-					</table>
-					<input type="hidden" name="<?echo $arParams["ACTION_VARIABLE"]?>" value="BUY">
-					<input type="hidden" name="<?echo $arParams["PRODUCT_ID_VARIABLE"]?>" value="<?echo $arOffer["ID"]?>">
-					<input type="submit" name="<?echo $arParams["ACTION_VARIABLE"]."BUY"?>" value="<?echo GetMessage("CATALOG_BUY")?>">
-					<input type="submit" name="<?echo $arParams["ACTION_VARIABLE"]."ADD2BASKET"?>" value="<?echo GetMessage("CT_BCE_CATALOG_ADD")?>">
-					</form>
-				<?else:?>
-					<noindex>
-					<a href="<?echo $arOffer["BUY_URL"]?>" rel="nofollow"><?echo GetMessage("CATALOG_BUY")?></a>
-					&nbsp;<a href="<?echo $arOffer["ADD_URL"]?>" rel="nofollow"><?echo GetMessage("CT_BCE_CATALOG_ADD")?></a>
-					</noindex>
-				<?endif;?>
-			<?elseif(count($arResult["CAT_PRICES"]) > 0):?>
-				<?=GetMessage("CATALOG_NOT_AVAILABLE")?>
-				<?$APPLICATION->IncludeComponent("bitrix:sale.notice.product", ".default", array(
-					"NOTIFY_ID" => $arOffer['ID'],
-					"NOTIFY_URL" => htmlspecialcharsback($arOffer["SUBSCRIBE_URL"]),
-					"NOTIFY_USE_CAPTHA" => "N"
-					),
-					$component
-				);?>
-			<?endif?>
-			</p>
-		<?endforeach;?>
-	<?else:?>
-
-	<?endif*/?>
-
-
-
-<?if (is_array($arResult['DISPLAY_PROPERTIES']) && count($arResult['DISPLAY_PROPERTIES']) > 0)
-{
-	$arPropertyRecommend = $arResult["DISPLAY_PROPERTIES"]["RECOMMEND"];
-	unset($arResult["DISPLAY_PROPERTIES"]["RECOMMEND"]);
-	if (is_array($arResult['DISPLAY_PROPERTIES']) && count($arResult['DISPLAY_PROPERTIES']) > 0):?>
-	<div class="detail_item_description info <?if (!CMobile::getInstance()->isLarge()) echo "close";?>">
-		<h3 onclick="OpenClose(BX(this).parentNode)"><?=GetMessage("CATALOG_PROPERTIES")?> <span class="detail_item_arrow"></span></h3>
-		<div class="detail_item_description_text">
-			<ul>
-			<?foreach($arResult["DISPLAY_PROPERTIES"] as $pid=>$arProperty):?>
-				<li>
-					<table>
-						<tr>
-							<td class="detail_item_feature"><span><?=$arProperty["NAME"]?>:</span></td>
-							<td class="detail_item__featurevalue"><span>
-							<?if(is_array($arProperty["DISPLAY_VALUE"])):
-								echo implode(" / ", $arProperty["DISPLAY_VALUE"]);
-							elseif($pid=="MANUAL"):
-								?><a href="<?=$arProperty["VALUE"]?>"><?=GetMessage("CATALOG_DOWNLOAD")?></a><?
-							else:
-								echo $arProperty["DISPLAY_VALUE"];?>
-							<?endif?>
-							</span></td>
-						</tr>
-					</table>
-				</li>
-			<?endforeach?>
-			</ul>
-		</div>
-	</div>
-	<?endif;
-}
-?>
-
-<div class="row">
-    <div class="col-xs-12 popular" >
-        <h3>Популярные в разделе </h3>
+    <!-- выводим добавки и опции -->
+    <div class="product-item-detail-info-section">
         <?
-        global $arFilterDetail;
 
-        $arFilterDetail = [
-            'IBLOCK_SECTION_ID' => $arResult["ORIGINAL_PARAMETERS"]["SECTION_ID"],
-            '!ID' => $arResult['ID']
-        ];
+        $arResult['OFFERS_PROP'] = ['KRUPA' => true];
+        $arParams['PRODUCT_INFO_BLOCK_ORDER'] = [0 => 'sku', 1 => 'props'];
+        foreach ($arParams['PRODUCT_INFO_BLOCK_ORDER'] as $blockName)
+        {
+            switch ($blockName)
+            {
+                case 'sku':
+                    echo 'sku';
+                    if ($haveOffers && !empty($arResult['OFFERS_PROP']))
+                    {
+                        echo 'haveOffers';
+                        ?>
+                        <div id="<?=$itemIds['TREE_ID']?>">
+                            <?
+                            foreach ($arResult['SKU_PROPS'] as $skuProperty)
+                            {
+                                if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']]))
+                                    continue;
 
-        $APPLICATION->IncludeComponent("strizhi:eshopapp.top", ".default", array(
-            "FILTER_NAME" => "arFilterDetail",
-            "IBLOCK_TYPE_ID" => "catalog",
-            "IBLOCK_ID" => "4",
-            "ELEMENT_SORT_FIELD" => "shows",
-            "ELEMENT_SORT_ORDER" => "DESC",
-            "ELEMENT_COUNT" => "8",
-            "FLAG_PROPERTY_CODE" => "SALELEADER",
-            "OFFERS_LIMIT" => "5",
-            "ACTION_VARIABLE" => "action",
-            "PRODUCT_ID_VARIABLE" => "id_top1",
-            "PRODUCT_QUANTITY_VARIABLE" => "quantity",
-            "PRODUCT_PROPS_VARIABLE" => "prop1",
-            "CATALOG_FOLDER" => SITE_DIR . "eshop_app/catalog/",
-            "CACHE_TYPE" => "A",
-            "CACHE_TIME" => "180",
-            "CACHE_GROUPS" => "Y",
-            "DISPLAY_COMPARE" => "N",
-            "PRICE_CODE" => array(
-                0 => "BASE",
-            ),
-            "USE_PRICE_COUNT" => "N",
-            "SHOW_PRICE_COUNT" => "1",
-            "PRICE_VAT_INCLUDE" => "Y",
-            "PRODUCT_PROPERTIES" => array(),
-            "CONVERT_CURRENCY" => "N",
-            "DISPLAY_IMG_WIDTH" => "300",
-            "DISPLAY_IMG_HEIGHT" => "300",
-            "BASKET_URL" => SITE_DIR . "eshop_app/personal/cart/",
-            "SHARPEN" => "30",
-            "VARIABLE_ALIASES" => array(
-                "SECTION_ID" => "SECTION_ID",
-                "ELEMENT_ID" => "ELEMENT_ID",
-            )
-        ),
-            false
-        ); ?>
+                                $propertyId = $skuProperty['ID'];
+                                $skuProps[] = array(
+                                    'ID' => $propertyId,
+                                    'SHOW_MODE' => $skuProperty['SHOW_MODE'],
+                                    'VALUES' => $skuProperty['VALUES'],
+                                    'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
+                                );
+                                ?>
+                                <div class="product-item-detail-info-container" data-entity="sku-line-block">
+                                    <div class="product-item-detail-info-container-title"><?=htmlspecialcharsEx($skuProperty['NAME'])?></div>
+                                    <div class="product-item-scu-container">
+                                        <div class="product-item-scu-block">
+                                            <div class="product-item-scu-list">
+                                                <ul class="product-item-scu-item-list">
+                                                    <?
+                                                    foreach ($skuProperty['VALUES'] as &$value)
+                                                    {
+                                                        $value['NAME'] = htmlspecialcharsbx($value['NAME']);
+
+                                                        if ($skuProperty['SHOW_MODE'] === 'PICT')
+                                                        {
+                                                            ?>
+                                                            <li class="product-item-scu-item-color-container" title="<?=$value['NAME']?>"
+                                                                data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
+                                                                data-onevalue="<?=$value['ID']?>">
+                                                                <div class="product-item-scu-item-color-block">
+                                                                    <div class="product-item-scu-item-color" title="<?=$value['NAME']?>"
+                                                                         style="background-image: url('<?=$value['PICT']['SRC']?>');">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <?
+                                                        }
+                                                        else
+                                                        {
+                                                            ?>
+                                                            <li class="product-item-scu-item-text-container" title="<?=$value['NAME']?>"
+                                                                data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
+                                                                data-onevalue="<?=$value['ID']?>">
+                                                                <div class="product-item-scu-item-text-block">
+                                                                    <div class="product-item-scu-item-text"><?=$value['NAME']?></div>
+                                                                </div>
+                                                            </li>
+                                                            <?
+                                                        }
+                                                    }
+                                                    ?>
+                                                </ul>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?
+                            }
+                            ?>
+                        </div>
+                        <?
+                    }
+
+                    break;
+
+                case 'props':
+                    if (!empty($arResult['DISPLAY_PROPERTIES']) || $arResult['SHOW_OFFERS_PROPS'])
+                    {
+                        ?>
+                        <div class="product-item-detail-info-container">
+                            <?
+                            if (!empty($arResult['DISPLAY_PROPERTIES']))
+                            {
+                                ?>
+                                <dl class="product-item-detail-properties">
+                                    <?
+                                    foreach ($arResult['DISPLAY_PROPERTIES'] as $property)
+                                    {
+                                        if (isset($arParams['MAIN_BLOCK_PROPERTY_CODE'][$property['CODE']]))
+                                        {
+                                            ?>
+                                            <dt><?=$property['NAME']?></dt>
+                                            <dd><?=(is_array($property['DISPLAY_VALUE'])
+                                                    ? implode(' / ', $property['DISPLAY_VALUE'])
+                                                    : $property['DISPLAY_VALUE'])?>
+                                            </dd>
+                                            <?
+                                        }
+                                    }
+                                    unset($property);
+                                    ?>
+                                </dl>
+                                <?
+                            }
+
+                            if ($arResult['SHOW_OFFERS_PROPS'])
+                            {
+                                ?>
+                                <dl class="product-item-detail-properties" id="<?=$itemIds['DISPLAY_MAIN_PROP_DIV']?>"></dl>
+                                <?
+                            }
+                            ?>
+                        </div>
+                        <?
+                    }
+
+                    break;
+            }
+        }
+        ?>
     </div>
-
+    <!-- -->
+    <div class="orderForm__amound">
+        <button type="submit" class="orderForm__btn">В корзину<!-- 800 ₽--></button>
+    </div>
 </div>
-
-
-</div>
-
-
-
-
-
-<script type="text/javascript">
-	app.setPageTitle({"title" : "<?=CUtil::JSEscape(htmlspecialcharsback($arResult["NAME"]))?>"});
-	function showPhoto(arPhotos, descr)
-	{
-		var photos = [];
-		for (var i=0; i<arPhotos.length; i++)
-		{
-			photos[i] = {url : arPhotos[i], description : descr};
-		}
-		app.openPhotos({
-			"photos": photos
-		});
-	}
-</script>
-
-
