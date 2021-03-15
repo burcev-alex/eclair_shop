@@ -1332,7 +1332,7 @@
 
 		initPopup: function()
 		{
-			if (this.config.usePopup)
+			/*if (this.config.usePopup)
 			{
 				this.node.imageContainer.style.cursor = 'zoom-in';
 				BX.bind(this.node.imageContainer, 'click', BX.delegate(this.toggleMainPictPopup, this));
@@ -1342,7 +1342,7 @@
 					'click',
 					BX.proxy(this.hideMainPictPopup, this)
 				);
-			}
+			}*/
 		},
 
 		checkSliderControls: function(count)
