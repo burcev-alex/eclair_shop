@@ -201,131 +201,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 						?>
                 </div>
                 <!-- кнопки добавления товара в корзину -->
-                <div class="product-item-detail-info-section">
-                    <?
-                    foreach ($arParams['PRODUCT_INFO_BLOCK_ORDER'] as $blockName)
-                    {
-                        switch ($blockName)
-                        {
-                            case 'sku':
-                                if ($haveOffers && !empty($arResult['OFFERS_PROP']))
-                                {
-                                    ?>
-                                    <div id="<?=$itemIds['TREE_ID']?>">
-                                        <?
-                                        foreach ($arResult['SKU_PROPS'] as $skuProperty)
-                                        {
-                                            if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']]))
-                                                continue;
 
-                                            $propertyId = $skuProperty['ID'];
-                                            $skuProps[] = array(
-                                                'ID' => $propertyId,
-                                                'SHOW_MODE' => $skuProperty['SHOW_MODE'],
-                                                'VALUES' => $skuProperty['VALUES'],
-                                                'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
-                                            );
-                                            ?>
-                                            <div class="product-item-detail-info-container" data-entity="sku-line-block">
-                                                <div class="product-item-detail-info-container-title"><?=htmlspecialcharsEx($skuProperty['NAME'])?></div>
-                                                <div class="product-item-scu-container">
-                                                    <div class="product-item-scu-block">
-                                                        <div class="product-item-scu-list">
-                                                            <ul class="product-item-scu-item-list">
-                                                                <?
-                                                                foreach ($skuProperty['VALUES'] as &$value)
-                                                                {
-                                                                    $value['NAME'] = htmlspecialcharsbx($value['NAME']);
-
-                                                                    if ($skuProperty['SHOW_MODE'] === 'PICT')
-                                                                    {
-                                                                        ?>
-                                                                        <li class="product-item-scu-item-color-container" title="<?=$value['NAME']?>"
-                                                                            data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
-                                                                            data-onevalue="<?=$value['ID']?>">
-                                                                            <div class="product-item-scu-item-color-block">
-                                                                                <div class="product-item-scu-item-color" title="<?=$value['NAME']?>"
-                                                                                     style="background-image: url('<?=$value['PICT']['SRC']?>');">
-                                                                                </div>
-                                                                            </div>
-                                                                        </li>
-                                                                        <?
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        ?>
-                                                                        <li class="product-item-scu-item-text-container" title="<?=$value['NAME']?>"
-                                                                            data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
-                                                                            data-onevalue="<?=$value['ID']?>">
-                                                                            <div class="product-item-scu-item-text-block">
-                                                                                <div class="product-item-scu-item-text"><?=$value['NAME']?></div>
-                                                                            </div>
-                                                                        </li>
-                                                                        <?
-                                                                    }
-                                                                }
-                                                                ?>
-                                                            </ul>
-                                                            <div style="clear: both;"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?
-                                        }
-                                        ?>
-                                    </div>
-                                    <?
-                                }
-
-                                break;
-
-                            case 'props':
-                                if (!empty($arResult['DISPLAY_PROPERTIES']) || $arResult['SHOW_OFFERS_PROPS'])
-                                {
-                                    ?>
-                                    <div class="product-item-detail-info-container">
-                                        <?
-                                        if (!empty($arResult['DISPLAY_PROPERTIES']))
-                                        {
-                                            ?>
-                                            <dl class="product-item-detail-properties">
-                                                <?
-                                                foreach ($arResult['DISPLAY_PROPERTIES'] as $property)
-                                                {
-                                                    if (isset($arParams['MAIN_BLOCK_PROPERTY_CODE'][$property['CODE']]))
-                                                    {
-                                                        ?>
-                                                        <dt><?=$property['NAME']?></dt>
-                                                        <dd><?=(is_array($property['DISPLAY_VALUE'])
-                                                                ? implode(' / ', $property['DISPLAY_VALUE'])
-                                                                : $property['DISPLAY_VALUE'])?>
-                                                        </dd>
-                                                        <?
-                                                    }
-                                                }
-                                                unset($property);
-                                                ?>
-                                            </dl>
-                                            <?
-                                        }
-
-                                        if ($arResult['SHOW_OFFERS_PROPS'])
-                                        {
-                                            ?>
-                                            <dl class="product-item-detail-properties" id="<?=$itemIds['DISPLAY_MAIN_PROP_DIV']?>"></dl>
-                                            <?
-                                        }
-                                        ?>
-                                    </div>
-                                    <?
-                                }
-
-                                break;
-                        }
-                    }
-                    ?>
-                </div>
                 <!-- кнопки добавления товара в корзину -->
             </div>
 
@@ -355,6 +231,131 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
                     <?=$arResult["PREVIEW_TEXT"]?>
                 <?endif;?>
             </div>
+    <div class="product-item-detail-info-section">
+        <?
+        foreach ($arParams['PRODUCT_INFO_BLOCK_ORDER'] as $blockName)
+        {
+            switch ($blockName)
+            {
+                case 'sku':
+                    if ($haveOffers && !empty($arResult['OFFERS_PROP']))
+                    {
+                        ?>
+                        <div id="<?=$itemIds['TREE_ID']?>">
+                            <?
+                            foreach ($arResult['SKU_PROPS'] as $skuProperty)
+                            {
+                                if (!isset($arResult['OFFERS_PROP'][$skuProperty['CODE']]))
+                                    continue;
+
+                                $propertyId = $skuProperty['ID'];
+                                $skuProps[] = array(
+                                    'ID' => $propertyId,
+                                    'SHOW_MODE' => $skuProperty['SHOW_MODE'],
+                                    'VALUES' => $skuProperty['VALUES'],
+                                    'VALUES_COUNT' => $skuProperty['VALUES_COUNT']
+                                );
+                                ?>
+                                <div class="product-item-detail-info-container" data-entity="sku-line-block">
+                                    <div class="product-item-detail-info-container-title"><?=htmlspecialcharsEx($skuProperty['NAME'])?></div>
+                                    <div class="product-item-scu-container">
+                                        <div class="product-item-scu-block">
+                                            <div class="product-item-scu-list">
+                                                <ul class="product-item-scu-item-list">
+                                                    <?
+                                                    foreach ($skuProperty['VALUES'] as &$value)
+                                                    {
+                                                        $value['NAME'] = htmlspecialcharsbx($value['NAME']);
+
+                                                        if ($skuProperty['SHOW_MODE'] === 'PICT')
+                                                        {
+                                                            ?>
+                                                            <li class="product-item-scu-item-color-container" title="<?=$value['NAME']?>"
+                                                                data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
+                                                                data-onevalue="<?=$value['ID']?>">
+                                                                <div class="product-item-scu-item-color-block">
+                                                                    <div class="product-item-scu-item-color" title="<?=$value['NAME']?>"
+                                                                         style="background-image: url('<?=$value['PICT']['SRC']?>');">
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <?
+                                                        }
+                                                        else
+                                                        {
+                                                            ?>
+                                                            <li class="product-item-scu-item-text-container" title="<?=$value['NAME']?>"
+                                                                data-treevalue="<?=$propertyId?>_<?=$value['ID']?>"
+                                                                data-onevalue="<?=$value['ID']?>">
+                                                                <div class="product-item-scu-item-text-block">
+                                                                    <div class="product-item-scu-item-text"><?=$value['NAME']?></div>
+                                                                </div>
+                                                            </li>
+                                                            <?
+                                                        }
+                                                    }
+                                                    ?>
+                                                </ul>
+                                                <div style="clear: both;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?
+                            }
+                            ?>
+                        </div>
+                        <?
+                    }
+
+                    break;
+
+                case 'props':
+                    if (!empty($arResult['DISPLAY_PROPERTIES']) || $arResult['SHOW_OFFERS_PROPS'])
+                    {
+                        ?>
+                        <div class="product-item-detail-info-container">
+                            <?
+                            if (!empty($arResult['DISPLAY_PROPERTIES']))
+                            {
+                                ?>
+                                <dl class="product-item-detail-properties">
+                                    <?
+                                    foreach ($arResult['DISPLAY_PROPERTIES'] as $property)
+                                    {
+                                        if (isset($arParams['MAIN_BLOCK_PROPERTY_CODE'][$property['CODE']]))
+                                        {
+                                            ?>
+                                            <dt><?=$property['NAME']?></dt>
+                                            <dd><?=(is_array($property['DISPLAY_VALUE'])
+                                                    ? implode(' / ', $property['DISPLAY_VALUE'])
+                                                    : $property['DISPLAY_VALUE'])?>
+                                            </dd>
+                                            <?
+                                        }
+                                    }
+                                    unset($property);
+                                    ?>
+                                </dl>
+                                <?
+                            }
+
+                            if ($arResult['SHOW_OFFERS_PROPS'])
+                            {
+                                ?>
+                                <dl class="product-item-detail-properties" id="<?=$itemIds['DISPLAY_MAIN_PROP_DIV']?>"></dl>
+                                <?
+                            }
+                            ?>
+                        </div>
+                        <?
+                    }
+
+                    break;
+            }
+        }
+        ?>
+    </div>
         </div>
 
         <div class="orderForm__amound">
@@ -388,6 +389,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
             ?>
         </div>
     </div>
+
 <!-- ###################################################################################### -->
 <div class="bx-catalog-element bx-<?=$arParams['TEMPLATE_THEME']?>" id="<?=$itemIds['ID']?>"
 	itemscope itemtype="http://schema.org/Product" style="display: none;">
