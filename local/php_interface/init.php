@@ -4,7 +4,7 @@ include_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/wsrubi.smtp/classes/gene
 
 require_once ($_SERVER["DOCUMENT_ROOT"]."/local/lib/IblockElementPropertyTable.php");
 require_once ($_SERVER["DOCUMENT_ROOT"]."/local/lib/CSms4bBase.php");
-
+require_once('const.php');
 define('LOG_FILENAME', $_SERVER['DOCUMENT_ROOT'].'/log.txt');
 
 require_once 'app_init.php';
