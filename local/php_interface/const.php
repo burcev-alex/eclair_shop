@@ -1,0 +1,3 @@
+<?
+define('CATALOG',4);
+?>
