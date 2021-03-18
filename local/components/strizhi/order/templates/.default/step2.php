@@ -50,14 +50,14 @@
         <div class="input-row">
             <input id="radio-input-0" type="radio" value="SELECT" name="FIELDS[DELIVERY]" <?if(!$checked)echo 'checked';?>>
             <label class="input-helper input-helper--radio" for="radio-input-0"><span class="orderForm__name">Доставка курьером</span>
-                <span class="orderForm__price">+ 500 ₽</span> </label>
+                <span class="orderForm__price"></span> </label>
         </div>
 
         <hr class="orderForm__hr">
 
         <div class="orderForm__select" id="deliveryselect">
             <div class="selectBlock__title">Выберите район доставки</div>
-            <select class="select" name="FIELDS[DELIVERY]">
+            <select class="selectdelivery" name="FIELDS[DELIVERY]">
                 <?foreach($arResult['DELIVERIS'] as $key=>$item){?>
                 <option value="<?=$item['ID']?>" price="<?=$item['PRICE']?>" <?if($arResult['DATA']['DELIVERY']==$item['ID'])echo 'checked';?>><?=$item['NAME']?></option>
                 <?}?>
@@ -185,19 +185,19 @@
     function setDeliveryField(){
         if($('#radio-input-0').is(':checked')){
             $('#deliveryselect').show();
+            $('#street').attr('required','required');
+            $('#home').attr('required','required');
         }else{
             $('#deliveryselect').hide();
+            $('.orderForm__price').html('');
+            $('#street').attr('required',false);
+            $('#home').attr('required',false);
         }
     }
-    /*function setDeliveryPrice(){
-        var select=$('#deliveryselect option:selected');
-        if(typeof select=="object"){
-            $('.orderForm__price').html('+ '+select.val()+' ₽');
-        }else{
-            $('.orderForm__price').html('+ 500 ₽');
-        }
+    function setDeliveryPrice(){
+            $('.orderForm__price').html('+ '+$('#deliveryselect option[value="'+$('.selectdelivery').val()+'"]').attr('price')+' ₽');
     }
-    setDeliveryPrice();*/
+    setDeliveryPrice();
 
     setDeliveryField();
     setCulteryField();
@@ -215,6 +215,13 @@
         $('#dateselect select').multipleSelect({
             onClick: function (view) {
                 $('#dateselect select').val(view.text);
+            },
+
+        });
+        $('.selectdelivery').multipleSelect({
+            onClick: function (view) {
+                $('select.selectdelivery').val(view.value);
+                setDeliveryPrice();
             },
 
         });

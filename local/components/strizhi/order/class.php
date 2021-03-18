@@ -22,7 +22,7 @@ class CBitrixPersonalOrder extends CBitrixComponent
                 LocalRedirect("/personal/cart/");
         }
         $this->templatefile='';
-        $this->arResult['DATA']=$_SESSION['ORDER'];
+        $this->arResult['DATA']=$_SESSION['ORDER']['USER'];
         if(empty($this->arResult['DATA']['USER']) && $GLOBALS['USER']->IsAuthorized()) {
             $this->arResult['DATA'] = CUser::GetList(($by = "id"), ($order = "asc"), [$GLOBALS['USER']->GetID()],['FIELDS'=>['SECOND_NAME','LAST_NAME','NAME','EMAIL','PERSONAL_PHONE']])->fetch();
             $this->arResult['DATA']['NAME']=$this->cname($this->arResult['DATA']['NAME'],$this->arResult['DATA']['LAST_NAME'],$this->arResult['DATA']['SECOND_NAME']);
@@ -60,7 +60,7 @@ class CBitrixPersonalOrder extends CBitrixComponent
     private function getPropertyByCode($propertyCollection, $code)  {
         foreach ($propertyCollection as $property)
         {
-            if($property->getField('CODE') == $code)
+            if($property->getField('CODE') == $code || $property->getField('ID') == $code)
                 return $property;
         }
     }
@@ -111,10 +111,10 @@ class CBitrixPersonalOrder extends CBitrixComponent
             $Property = $this->getPropertyByCode($propertyCollection, 'PHONE');
             $Property->setValue($_SESSION['ORDER']['USER']['PERSONAL_PHONE']);
             $Property = $this->getPropertyByCode($propertyCollection, 'STREET');
-            $Property->setValue($_SESSION['ORDER']['USER']['STREET']);
+            $Property->setValue($_SESSION['ORDER']['DELIVERY']['STREET']);
             $Property = $this->getPropertyByCode($propertyCollection, 'FLOOR');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['FLOOR']);
-            $Property = $this->getPropertyByCode($propertyCollection, 'ENTRANCE');
+            $Property = $this->getPropertyByCode($propertyCollection, 'podezd');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['ENTRANCE']);
             $Property = $this->getPropertyByCode($propertyCollection, 'FLAT');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['FLAT']);
