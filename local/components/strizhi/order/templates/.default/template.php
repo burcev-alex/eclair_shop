@@ -1,4 +1,7 @@
 <?if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();?>
+<?
+$APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/jquery.mask.js");
+?>
 <div class="order">
     <h1 class="order__title">Оформление заказа</h1>
 
@@ -57,4 +60,8 @@
         <button type="submit" class="orderForm__btn">Продолжить</button>
     </form>
 </div>
+
+<script>
+    $("#phone").mask("+7 (000) 000 00 00");
+    </script>
 
