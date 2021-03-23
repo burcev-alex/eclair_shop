@@ -51,8 +51,8 @@ $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/jquery.mask.js");
         </div>
 
         <div class="input-row">
-            <input id="checkbox-input-1" type="checkbox" value="myValue 1">
-            <label class="input-helper input-helper--checkbox" for="checkbox-input-1" name="FIELDS[]" value="Y" <?if($arResult['DATA']['WHATSAPP']=="Y")echo 'checked';?>>Напишите мне в WhatsApp</label>
+            <input id="checkbox-input-1" type="checkbox" name="FIELDS[WHATSAPP]" value="Y" <?if($arResult['DATA']['WHATSAPP']=="Y")echo 'checked';?>>
+            <label class="input-helper input-helper--checkbox" for="checkbox-input-1">Напишите мне в WhatsApp</label>
         </div>
 
         <hr class="orderForm__hr">
@@ -63,5 +63,5 @@ $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/jquery.mask.js");
 
 <script>
     $("#phone").mask("+7 (000) 000 00 00");
-    </script>
+</script>
 

@@ -44,7 +44,9 @@
             <div class="orderFormOrder__left">
                 <div class="orderFormOrder__title"><?=$item['NAME']?></div>
                 <p class="orderFormOrder__desc"><?if($item['WEIGHT']>0)echo $item['WEIGHT'].' гр.'?> <?=$item['PREVIEW_TEXT']?></p>
-               <?/* <p class="orderFormOrder__add">Добавки: Банан, малиновое варенье</p>*/?>
+                <?if(!empty($item['PROPS'])){?>
+                    <p class="orderFormOrder__add">Добавки: <?=implode(', ',$item['PROPS']);?></p>
+                <?}?>
             </div>
 
             <div class="orderFormOrder__right">
@@ -55,19 +57,28 @@
 
         <hr class="orderForm__hr">
 <?}?>
+        <div class="orderFormOrder flex">
+            <div class="orderFormOrder__left">
+                <div class="orderFormOrder__title">Доставка</div>
+                    <p class="orderFormOrder__add"><?=$arResult['DELIVERY']['NAME'];?></p>
+            </div>
+
+            <div class="orderFormOrder__right">
+                <div class="orderFormOrder__title"><?=CurrencyFormat($arResult['DELIVERY']['PRICE'], "RUB")?></div>
+            </div>
+        </div>
+
+        <hr class="orderForm__hr">
+
         <div class="orderFormOrderAmount flex">
             <div class="orderFormOrderAmount__title">Сумма заказа: <span><?=CurrencyFormat($arResult['SUM'], "RUB")?></span></div>
         </div>
+        <button type="submit" class="orderForm__btn">Оформить заказ за <?=CurrencyFormat($arResult['SUM'], "RUB")?></button>
     </form>
 </div>
-<div class="orderForm__amound">
-    <button type="submit" class="orderForm__btn">Оформить заказ за <?=CurrencyFormat($arResult['SUM'], "RUB")?></button>
-</div>
+
 <script>
     $('.orderForm__dateClient').click(function(){
         window.location.href = '?action='+$(this).attr('step');
-    });
-    $('.orderForm__btn').click(function(){
-        window.location.href = '?action=order5';
     });
 </script>

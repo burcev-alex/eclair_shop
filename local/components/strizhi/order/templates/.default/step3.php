@@ -38,7 +38,7 @@
         <h4 class="orderForm__title">Оплата</h4>
         <?foreach($arResult['PAYS'] as $key=>$item){?>
             <div class="input-row">
-                <input id="radio-input-<?=$key?>" type="radio" value="<?=$item['ID']?>" name="FIELDS[PAY]" <?if($key==0)echo 'checked';?> >
+                <input id="radio-input-<?=$key?>" type="radio" value="<?=$item['ID']?>" name="FIELDS[PAY]" <?if($item['ID']==$arResult['DATA']['PAY'])echo 'checked';?> >
                 <label class="input-helper input-helper--radio" for="radio-input-<?=$key?>"><span class="orderForm__name"><?=$item['NAME']?></span> </label>
             </div>
         <?}?>

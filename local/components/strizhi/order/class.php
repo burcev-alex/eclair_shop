@@ -16,14 +16,14 @@ class CBitrixPersonalOrder extends CBitrixComponent
 	public function executeComponent()
 	{
 		$this->useModules();
-        if(empty($_GET['ORDER_ID'])) {
-            $basketcount = CSaleBasket::GetList(false, array("FUSER_ID" => CSaleBasket::GetBasketUserID(), "LID" => SITE_ID, "ORDER_ID" => "NULL", 'DELAY' => 'N'), false, false, array("ID"))->SelectedRowsCount();
-            if ($basketcount < 1)
-                LocalRedirect("/personal/cart/");
-        }
+
+        $basketcount = CSaleBasket::GetList(false, array("FUSER_ID" => CSaleBasket::GetBasketUserID(), "LID" => SITE_ID, "ORDER_ID" => "NULL", 'DELAY' => 'N'), false, false, array("ID"))->SelectedRowsCount();
+        if ($basketcount < 1)
+            LocalRedirect(SITE_DIR."/personal/cart/");
+
         $this->templatefile='';
         $this->arResult['DATA']=$_SESSION['ORDER']['USER'];
-        if(empty($this->arResult['DATA']['USER']) && $GLOBALS['USER']->IsAuthorized()) {
+        if(empty($this->arResult['DATA']) && $GLOBALS['USER']->IsAuthorized()) {
             $this->arResult['DATA'] = CUser::GetList(($by = "id"), ($order = "asc"), [$GLOBALS['USER']->GetID()],['FIELDS'=>['SECOND_NAME','LAST_NAME','NAME','EMAIL','PERSONAL_PHONE']])->fetch();
             $this->arResult['DATA']['NAME']=$this->cname($this->arResult['DATA']['NAME'],$this->arResult['DATA']['LAST_NAME'],$this->arResult['DATA']['SECOND_NAME']);
         }
@@ -65,92 +65,97 @@ class CBitrixPersonalOrder extends CBitrixComponent
         }
     }
     protected function order5Action(){
-	    if(empty($_GET['ORDER_ID'])){
-            $siteId = \Bitrix\Main\Context::getCurrent()->getSite();
+        $siteId = \Bitrix\Main\Context::getCurrent()->getSite();
 
-            $currencyCode = Bitrix\Main\Config\Option::get('sale', 'default_currency', 'RUB');
+        $currencyCode = Bitrix\Main\Config\Option::get('sale', 'default_currency', 'RUB');
 
-            Bitrix\Sale\DiscountCouponsManager::init();
-            $user=$GLOBALS['USER']->GetID();
-            if(empty($user))
-                $user=\CSaleUser::GetAnonymousUserID();
-            $order = Bitrix\Sale\Order::create($siteId, $user);
+        Bitrix\Sale\DiscountCouponsManager::init();
+        $user=$GLOBALS['USER']->GetID();
+        if(empty($user))
+            $user=\CSaleUser::GetAnonymousUserID();
+        $order = Bitrix\Sale\Order::create($siteId, $user);
 
-            $order->setPersonTypeId(1);
-            $basket = Bitrix\Sale\Basket::loadItemsForFUser(\CSaleBasket::GetBasketUserID(), $siteId)->getOrderableItems();
+        $order->setPersonTypeId(1);
+        $basket = Bitrix\Sale\Basket::loadItemsForFUser(\CSaleBasket::GetBasketUserID(), $siteId)->getOrderableItems();
 
-            $order->setBasket($basket);
+        $order->setBasket($basket);
 
-            $shipmentCollection = $order->getShipmentCollection();
-            $shipment = $shipmentCollection->createItem(
-                Bitrix\Sale\Delivery\Services\Manager::getObjectById($_SESSION['ORDER']['DELIVERY']['DELIVERY'])
-            );
+        $shipmentCollection = $order->getShipmentCollection();
+        $shipment = $shipmentCollection->createItem(
+            Bitrix\Sale\Delivery\Services\Manager::getObjectById($_SESSION['ORDER']['DELIVERY']['DELIVERY'])
+        );
 
-            $shipmentItemCollection = $shipment->getShipmentItemCollection();
+        $shipmentItemCollection = $shipment->getShipmentItemCollection();
 
-            foreach ($basket as $basketItem)
-            {
-                $item = $shipmentItemCollection->createItem($basketItem);
-                $item->setQuantity($basketItem->getQuantity());
-            }
+        foreach ($basket as $basketItem)
+        {
+            $item = $shipmentItemCollection->createItem($basketItem);
+            $item->setQuantity($basketItem->getQuantity());
+        }
 
-            $paymentCollection = $order->getPaymentCollection();
-            $payment = $paymentCollection->createItem(
-                Bitrix\Sale\PaySystem\Manager::getObjectById($_SESSION['ORDER']['PAYS']['PAY'])
-            );
-            $payment->setField("SUM", $order->getPrice());
-            $payment->setField("CURRENCY", $order->getCurrency());
+        $paymentCollection = $order->getPaymentCollection();
+        $payment = $paymentCollection->createItem(
+            Bitrix\Sale\PaySystem\Manager::getObjectById($_SESSION['ORDER']['PAYS']['PAY'])
+        );
+        $payment->setField("SUM", $order->getPrice());
+        $payment->setField("CURRENCY", $order->getCurrency());
 
-            $order->doFinalAction(true);
-            $propertyCollection = $order->getPropertyCollection();
+        $order->doFinalAction(true);
+        $propertyCollection = $order->getPropertyCollection();
 
-            $Property = $this->getPropertyByCode($propertyCollection, 'FIO');
-            $Property->setValue($_SESSION['ORDER']['USER']['NAME']);
-            $Property = $this->getPropertyByCode($propertyCollection, 'EMAIL');
-            $Property->setValue($_SESSION['ORDER']['USER']['EMAIL']);
-            $Property = $this->getPropertyByCode($propertyCollection, 'PHONE');
-            $Property->setValue($_SESSION['ORDER']['USER']['PERSONAL_PHONE']);
+        $Property = $this->getPropertyByCode($propertyCollection, 'FIO');
+        $Property->setValue($_SESSION['ORDER']['USER']['NAME']);
+        $Property = $this->getPropertyByCode($propertyCollection, 'EMAIL');
+        $Property->setValue($_SESSION['ORDER']['USER']['EMAIL']);
+        $Property = $this->getPropertyByCode($propertyCollection, 'PHONE');
+        $Property->setValue($_SESSION['ORDER']['USER']['PERSONAL_PHONE']);
+        if(!empty($_SESSION['ORDER']['DELIVERY']['STREET'])) {
             $Property = $this->getPropertyByCode($propertyCollection, 'STREET');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['STREET']);
+        }
+        if(!empty($_SESSION['ORDER']['DELIVERY']['FLOOR'])) {
             $Property = $this->getPropertyByCode($propertyCollection, 'FLOOR');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['FLOOR']);
+        }
+        if(!empty($_SESSION['ORDER']['DELIVERY']['podezd'])) {
             $Property = $this->getPropertyByCode($propertyCollection, 'podezd');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['ENTRANCE']);
+        }
+        if(!empty($_SESSION['ORDER']['DELIVERY']['FLAT'])) {
             $Property = $this->getPropertyByCode($propertyCollection, 'FLAT');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['FLAT']);
+        }
+        if(!empty($_SESSION['ORDER']['DELIVERY']['HOME'])) {
             $Property = $this->getPropertyByCode($propertyCollection, 'HOME');
             $Property->setValue($_SESSION['ORDER']['DELIVERY']['HOME']);
-
-            if($_SESSION['ORDER']['DELIVERY']['TIME']=='N')
-                $time='Ближайшее время';
-            else
-                $time=$_SESSION['ORDER']['DELIVERY']['TIMESELECT'].' '.$_SESSION['ORDER']['DELIVERY']['TIMESELECT2'];
-
-            $Property = $this->getPropertyByCode($propertyCollection, 'TIME');
-            $Property->setValue($time);
-
-            if($_SESSION['ORDER']['DELIVERY']['CULTERY']=='N')
-                $cultery=0;
-            else
-                $cultery=$_SESSION['ORDER']['DELIVERY']['CULTERYSELECT'];
-            $Property = $this->getPropertyByCode($propertyCollection, 'QUANTITY_WARE');
-            $Property->setValue($cultery);
-
-            if($_SESSION['ORDER']['USER']['WHATSAPP']=='Y')
-                $vidsvyazi=2;
-            else
-                $vidsvyazi=1;
-            $Property = $this->getPropertyByCode($propertyCollection, 'VIDSVYAZI');
-            $Property->setValue($vidsvyazi);
-
-            $order->setField('CURRENCY', $currencyCode);
-            $order->setField('USER_DESCRIPTION', $_SESSION['ORDER']['DELIVERY']['COMMENT']);
-
-            $order->save();
-
-            $orderId = $order->GetId();
-            LocalRedirect("?action=order5&ORDER_ID=".$orderId);
         }
+
+        if($_SESSION['ORDER']['DELIVERY']['TIME']=='N')
+            $time='Ближайшее время';
+        else
+            $time=$_SESSION['ORDER']['DELIVERY']['TIMESELECT'].' '.$_SESSION['ORDER']['DELIVERY']['TIMESELECT2'];
+
+        $Property = $this->getPropertyByCode($propertyCollection, 'TIME');
+        $Property->setValue($time);
+
+        if($_SESSION['ORDER']['DELIVERY']['CULTERY']=='N')
+            $cultery=0;
+        else
+            $cultery=$_SESSION['ORDER']['DELIVERY']['CULTERYSELECT'];
+        $Property = $this->getPropertyByCode($propertyCollection, 'QUANTITY_WARE');
+        $Property->setValue($cultery);
+        if($_SESSION['ORDER']['USER']['WHATSAPP']=='Y')
+            $vidsvyazi=1;
+        else
+            $vidsvyazi=0;
+        $Property = $this->getPropertyByCode($propertyCollection, 'VIDSVYAZI');
+        $Property->setValue($vidsvyazi);
+
+        $order->setField('CURRENCY', $currencyCode);
+        $order->setField('USER_DESCRIPTION', $_SESSION['ORDER']['DELIVERY']['COMMENT']);
+
+        $order->save();
+
         $this->templatefile='step5';
     }
 
@@ -161,46 +166,79 @@ class CBitrixPersonalOrder extends CBitrixComponent
         $this->templatefile='step4';
         $this->arResult['BASKET'] = [];
 
-        $dbBasketItems = CSaleBasket::GetList(
-            array(
-                "NAME" => "ASC",
-                "ID" => "ASC"
-            ),
-            array(
-                "FUSER_ID" => CSaleBasket::GetBasketUserID(),
-                "LID" => SITE_ID,
-                "ORDER_ID" => "NULL",
-                "DELAY"=>'N'
-            ),
-            false,
-            false,
-            array("ID", "CALLBACK_FUNC", "MODULE","PRODUCT_ID", "QUANTITY", "PRICE", "WEIGHT")
-        );
-        $prods=[];
-        while ($arItems = $dbBasketItems->Fetch())
+        $basketStorage = \Bitrix\Sale\Basket\Storage::getInstance(\Bitrix\Sale\Fuser::getId(), SITE_ID);
+        $fullBasket = $basketStorage->getBasket();
+        if (!$fullBasket->isEmpty())
         {
-            if (strlen($arItems["CALLBACK_FUNC"]) > 0)
-            {
-                CSaleBasket::UpdatePrice($arItems["ID"],
-                    $arItems["CALLBACK_FUNC"],
-                    $arItems["MODULE"],
-                    $arItems["PRODUCT_ID"],
-                    $arItems["QUANTITY"]);
-                $arItems = CSaleBasket::GetByID($arItems["ID"]);
-            }
-            $prods[]=$arItems['PRODUCT_ID'];
-            $this->arResult['BASKET'][] = $arItems;
-        }
-        $res = \Bitrix\Catalog\ProductTable::getList(array(
-            'filter' => array('=ID'=>$prods),
-            'select' => array('ID','NAME'=>'IBLOCK_ELEMENT.NAME','PREVIEW_TEXT'=>'IBLOCK_ELEMENT.PREVIEW_TEXT'),
-        ));
+            $orderableBasket = $basketStorage->getOrderableBasket();
 
-        $prods=[];
-        while($ob = $res->fetch())
-        {
-            $prods[$ob['ID']]=$ob['NAME'];
+            foreach ($fullBasket as $item)
+            {
+                if ($item->canBuy() && !$item->isDelay())
+                {
+                    $item = $orderableBasket->getItemByBasketCode($item->getBasketCode());
+                }
+                $propertyCollection = $item->getPropertyCollection();
+                $basketId = $item->getBasketCode();
+                $properties=[];
+                foreach ($propertyCollection->getPropertyValues() as $property)
+                {
+                    if ($property['CODE'] == 'CATALOG.XML_ID' || $property['CODE'] == 'PRODUCT.XML_ID' || $property['CODE'] == 'SUM_OF_CHARGE')
+                        continue;
+
+                    $property = array_filter($property, ['CSaleBasketHelper', 'filterFields']);
+                    $property['BASKET_ID'] = $basketId;
+
+                    $properties[] = $property;
+                }
+                $basketItem = $item->getFieldValues();
+                $basketItem['PROPS']=$properties;
+                foreach($basketItem['PROPS'] as $key=>$val){
+                    if($val['CODE']=='CML2_LINK')
+                        unset($basketItem['PROPS'][$key]);
+                    else
+                        $basketItem['PROPS'][$key]=$val['VALUE'];
+                }
+                $basketItem['QUANTITY'] = $item->getQuantity();
+
+                $basketItem['WEIGHT'] = (float)$basketItem['WEIGHT'];
+                $basketItem['WEIGHT_FORMATED'] = roundEx($basketItem['WEIGHT'] / $this->weightKoef, SALE_WEIGHT_PRECISION).' '.$this->weightUnit;
+
+                $basketItem['PRICE'] = \Bitrix\Sale\PriceMaths::roundPrecision($basketItem['PRICE']);
+                $basketItem['PRICE_FORMATED'] = CCurrencyLang::CurrencyFormat($basketItem['PRICE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['FULL_PRICE'] = \Bitrix\Sale\PriceMaths::roundPrecision($basketItem['BASE_PRICE']);
+                $basketItem['FULL_PRICE_FORMATED'] = CCurrencyLang::CurrencyFormat($basketItem['FULL_PRICE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['DISCOUNT_PRICE'] = \Bitrix\Sale\PriceMaths::roundPrecision($basketItem['DISCOUNT_PRICE']);
+                $basketItem['DISCOUNT_PRICE_FORMATED'] = CCurrencyLang::CurrencyFormat($basketItem['DISCOUNT_PRICE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['SUM_VALUE'] = $basketItem['PRICE'] * $basketItem['QUANTITY'];
+                $basketItem['SUM'] = CCurrencyLang::CurrencyFormat($basketItem['SUM_VALUE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['SUM_FULL_PRICE'] = $basketItem['FULL_PRICE'] * $basketItem['QUANTITY'];
+                $basketItem['SUM_FULL_PRICE_FORMATED'] = CCurrencyLang::CurrencyFormat($basketItem['SUM_FULL_PRICE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['SUM_DISCOUNT_PRICE'] = $basketItem['DISCOUNT_PRICE'] * $basketItem['QUANTITY'];
+                $basketItem['SUM_DISCOUNT_PRICE_FORMATED'] = CCurrencyLang::CurrencyFormat($basketItem['SUM_DISCOUNT_PRICE'], $basketItem['CURRENCY'], true);
+
+                $basketItem['PRICE_VAT_VALUE'] = $basketItem['VAT_VALUE']
+                    = ($basketItem['PRICE'] * $basketItem['QUANTITY'] / ($basketItem['VAT_RATE'] + 1)) * $basketItem['VAT_RATE'] / $basketItem['QUANTITY'];
+
+                $basketItem['DISCOUNT_PRICE_PERCENT'] = 0;
+                if ($basketItem['CUSTOM_PRICE'] !== 'Y')
+                {
+                    $basketItem['DISCOUNT_PRICE_PERCENT'] = \Bitrix\Sale\Discount::calculateDiscountPercent(
+                        $basketItem['FULL_PRICE'],
+                        $basketItem['DISCOUNT_PRICE']
+                    );
+                    if ($basketItem['DISCOUNT_PRICE_PERCENT'] === null)
+                        $basketItem['DISCOUNT_PRICE_PERCENT'] = 0;
+                }
+                $this->arResult['BASKET'][$item->getId()] = $basketItem;
+            }
         }
+        $this->arResult['DELIVERYIFS']=$this->deliveryifs();
         if(!empty($_SESSION['ORDER']['DELIVERY']['DELIVERY'])){
             $delivery = CSaleDelivery::GetList(
                 array(
@@ -213,15 +251,13 @@ class CBitrixPersonalOrder extends CBitrixComponent
                     "ID"=>$_SESSION['ORDER']['DELIVERY']['DELIVERY']
                 )
             )->fetch();
-            $delivery['QUANTITY']=1;
-
-            $this->arResult['BASKET'][]=$delivery;
+            if($delivery['NAME']!='Самовывоз')
+                $delivery['NAME']=$delivery['NAME'].'. Бесплатно от '.$this->arResult['DELIVERYIFS'][$delivery['ID']]['FREE_PRICE'].' ₽';
+            $this->arResult['DELIVERY']=$delivery;
         }
         $this->arResult['SUM']=0;
         foreach( $this->arResult['BASKET'] as $key=>$val){
-            $this->arResult['SUM']=$this->arResult['SUM']+$val['PRICE'];
-            if(!empty($prods[$val['PRODUCT_ID']]))
-                $this->arResult['BASKET'][$key]['NAME']=$prods[$val['PRODUCT_ID']];
+            $this->arResult['SUM']=$this->arResult['SUM']+$val['SUM_VALUE'];
         }
     }
     protected function order3Action(){
@@ -230,6 +266,8 @@ class CBitrixPersonalOrder extends CBitrixComponent
         }
 
         $this->arResult['DATA']=$_SESSION['ORDER']['PAYS'];
+        if(empty($this->arResult['DATA']['PAY']))
+            $this->arResult['DATA']['PAY']=1;
         $this->templatefile='step3';
         $db_ptype = CSalePaySystem::GetList($arOrder = Array("SORT"=>"ASC", "PSA_NAME"=>"ASC"), Array("LID"=>SITE_ID, "ACTIVE"=>"Y"));
         $this->arResult['PAYS']=[];
@@ -262,6 +300,7 @@ class CBitrixPersonalOrder extends CBitrixComponent
                 $this->arResult['DELIVERIS'][]=$ar_dtype;
         }
         $this->arResult['DATES']=[$this->createdate(date('j',strtotime("now")),date('n',strtotime("now")))];
+
         $this->arResult['TIMES']=[];
         foreach (range(1, 9) as $number) {
             $this->arResult['DATES'][]=$this->createdate(date('j',strtotime("+".$number." day")),date('n',strtotime("+".$number." day")));
@@ -270,9 +309,10 @@ class CBitrixPersonalOrder extends CBitrixComponent
         $this->arResult['CURTIMES']='';
         foreach (range(0, 23) as $number) {
             if($number>=$this->arResult['CURTIME'])
-                $this->arResult['CURTIMES'].='<option>'.$number.':00</option>';
+                $this->arResult['CURTIMES'].='<option '.($this->arResult['DATA']['TIMESELECT2']==$number.':00'?'selected':'').'>'.$number.':00</option>';
             $this->arResult['TIMES'][]=$number;
         }
+        $this->arResult['DELIVERYIFS']=$this->deliveryifs();
     }
     function ceildec($val){
         return ceil($val/10) * 10;
@@ -295,6 +335,20 @@ class CBitrixPersonalOrder extends CBitrixComponent
 
         $m = $arr[$m-1];
 	    return $d.' '.$m;
+    }
+    protected function deliveryifs(){
+        return  [
+            23 => ['FREE_PRICE'=>2000,'PRICE'=>200], //Дзержинский
+            25 => ['FREE_PRICE'=>2000,'PRICE'=>200], //ЖД
+            21 => ['FREE_PRICE'=>1500,'PRICE'=>200], //Заельц
+            22 => ['FREE_PRICE'=>2000,'PRICE'=>200], //Калинин
+            28 => ['FREE_PRICE'=>3000,'PRICE'=>350], //КИровский
+            27 => ['FREE_PRICE'=>2500,'PRICE'=>250], //Ленинский
+            26 => ['FREE_PRICE'=>2000,'PRICE'=>200], //Окт
+            29 => ['FREE_PRICE'=>5000,'PRICE'=>500], //Первомайский
+            30 => ['FREE_PRICE'=>5000,'PRICE'=>500], //Советский
+            24 => ['FREE_PRICE'=>1500,'PRICE'=>200] //ЦЕнтральный
+        ];
     }
     public function cname($name,$lastname,$secondname){
         if(!empty($lastname)){
