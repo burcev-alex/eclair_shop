@@ -130,9 +130,12 @@ class Element
             'PREVIEW_TEXT_TYPE' => $data['PREVIEW_TEXT_TYPE'],
             'DETAIL_TEXT' => $data['DETAIL_TEXT'],
             'DETAIL_TEXT_TYPE' => $data['DETAIL_TEXT_TYPE'],
-            'TAGS' => $data['TAGS'],
-            'PROPERTY_VALUES' => $arProperties,
+            'TAGS' => $data['TAGS']
 		];
+
+        if(count($arProperties) > 0){
+			$arFields['PROPERTY_VALUES'] = $arProperties;
+		}
 
         if (strlen($data['PREVIEW_PICTURE']) > 0) {
             $arFields['PREVIEW_PICTURE'] = \CFile::MakeFileArray($data['PREVIEW_PICTURE']);
@@ -159,36 +162,39 @@ class Element
         if (intval($ID) == 0) {
             $xmlId = 0;
         } else {
-            $arFieldsProduct = [
-                'ID' => $ID,
-                'QUANTITY' => 1000,
-                'QUANTITY_TRACE' => 'N',
-                'CAN_BUY_ZERO' => 'Y'
-            ];
-            \CCatalogProduct::Add($arFieldsProduct);
 
-            $arFieldsPrice = [
-                'PRODUCT_ID' => $ID,
-                'CATALOG_GROUP_ID' => 1,
-                'PRICE' => $data['PRICE']['PRICE'],
-                'CURRENCY' => $data['PRICE']['CURRENCY']
-            ];
+            if(array_key_exists('PRICE', $data)){
+                $arFieldsProduct = [
+                    'ID' => $ID,
+                    'QUANTITY' => 1000,
+                    'QUANTITY_TRACE' => 'N',
+                    'CAN_BUY_ZERO' => 'Y'
+                ];
+                \CCatalogProduct::Add($arFieldsProduct);
 
-            $resPrice = \CPrice::GetList(
-                [],
-                [
+                $arFieldsPrice = [
                     'PRODUCT_ID' => $ID,
                     'CATALOG_GROUP_ID' => 1,
-                ]
-            );
+                    'PRICE' => $data['PRICE']['PRICE'],
+                    'CURRENCY' => $data['PRICE']['CURRENCY']
+                ];
 
-            if ($arrPrice = $resPrice->Fetch()) {
-                \CPrice::Update($arrPrice['ID'], $arFieldsPrice);
-            } else {
-                \CPrice::Add($arFieldsPrice);
+                $resPrice = \CPrice::GetList(
+                    [],
+                    [
+                        'PRODUCT_ID' => $ID,
+                        'CATALOG_GROUP_ID' => 1,
+                    ]
+                );
+
+                if ($arrPrice = $resPrice->Fetch()) {
+                    \CPrice::Update($arrPrice['ID'], $arFieldsPrice);
+                } else {
+                    \CPrice::Add($arFieldsPrice);
+                }
+
+                \CPrice::SetBasePrice($ID, $data['PRICE']['PRICE'], $data['PRICE']['CURRENCY']);
             }
-
-            \CPrice::SetBasePrice($ID, $data['PRICE']['PRICE'], $data['PRICE']['CURRENCY']);
         }
 
         return $xmlId;
