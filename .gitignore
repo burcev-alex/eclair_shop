@@ -26,7 +26,7 @@ Thumbs.db
 /local/tests/_output/
 /local/tests/_data/
 /local/tests/selenium-server/
-/local/vendor/
+#/local/vendor/
 /log.txt
 /test*.php
 log.htm
