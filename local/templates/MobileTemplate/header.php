@@ -13,8 +13,13 @@ IncludeTemplateLangFile(__FILE__);
     <!--<link href="<?=CUtil::GetAdditionalFileURL(SITE_TEMPLATE_PATH."/template_styles.css")?>" type="text/css" rel="stylesheet" />-->
     <?//$APPLICATION->ShowHeadStrings();?>
     <?
-    $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/script.js");
-    $APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/css/styles.css", true);
+    $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/jquery-3.4.1.min.js");
+    $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/selects.js");
+    $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/js/selectsSetting.js");
+//    $APPLICATION->AddHeadScript(SITE_TEMPLATE_PATH."/script.js");
+//    $APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/css/styles.css", true);
+    $APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/css/style.css");
+    $APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/css/selects.css");
     ?>
     <?CJSCore::Init('ajax');?>
     <title><?$APPLICATION->ShowTitle()?></title>
@@ -51,6 +56,6 @@ if ($APPLICATION->GetCurPage(true) != SITE_DIR."eshop_app/personal/cart/index.ph
     <?
 }
 ?>
-<div class="wrap">
+<!--<div class="wrap">-->
     <?
     ?>

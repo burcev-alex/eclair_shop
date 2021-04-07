@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content=" " name="description">
+  <meta content=" " name="keywords">
+
+  <title>Оформление заказа</title>
+
+  <link href="css/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="css/selects.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="order">
+  <h1 class="order__title">Оформление заказа</h1>
+
+  <div class="orderRangeMain">
+    <ul class="orderRangeDisc flex">
+      <li>
+<!--        <span class="orderRange__disc"></span>-->
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__disc"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__not"></span>
+      </li>
+    </ul>
+
+    <ul class="orderRange flex">
+      <li class="orderRange__order active">
+        <span class="orderRange__name">Способ оплаты</span>
+      </li>
+    </ul>
+  </div>
+
+  <button type="button" class="orderForm__dateClient flex">Данные клиента</button>
+
+  <button type="button" class="orderForm__dateClient flex">Доставка</button>
+
+  <form action="#" class="orderForm">
+    <h4 class="orderForm__title">Оплата</h4>
+
+    <div class="input-row">
+      <input id="radio-input-8" type="radio" value="myValue 1" name="radio-group" checked>
+      <label class="input-helper input-helper--radio" for="radio-input-8"><span class="orderForm__name">Картой
+        онлайн</span> </label>
+    </div>
+
+    <div class="input-row">
+      <input id="radio-input-9" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-9"><span class="orderForm__name">Наличными при
+        получении</span> </label>
+    </div>
+
+    <div class="input-row">
+      <input id="radio-input-10" type="radio" value="myValue 1" name="radio-group">
+      <label class="input-helper input-helper--radio" for="radio-input-10"><span class="orderForm__name">Картой при
+        получении</span> </label>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <button type="submit" class="orderForm__btn">Продолжить</button>
+  </form>
+</div>
+</body>
+</html>

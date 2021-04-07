@@ -5,7 +5,37 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-/*@import "root";*/
+:root {
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 *,
 *::before,
 *::after {
@@ -47,6 +77,11 @@ hr {
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5rem;
+}
+
+body h3 {
+  margin: 10px 0;
+  border: 0;
 }
 
 p {
@@ -130,7 +165,14 @@ a:hover {
   color: #0056b3;
   text-decoration: underline;
 }
-
+a:focus {
+  color: #0056b3;
+  background-color: transparent;
+}
+.nav > li > a:hover, .nav > li > a:focus {
+  color: #0056b3;
+  background-color: transparent;
+}
 a:not([href]) {
   color: inherit;
   text-decoration: none;
@@ -9857,7 +9899,7 @@ body a:hover {
   text-decoration: none;
   color: #ffffff;
 }
-body a, body b, body blockquote, body center, body code, body div, body h1, body h2, body h3, body h4, body h5, body h6, body i, body img, body p, body pre, body span, body table, body td, body th, body tr, body u, body video {
+body a, body b, body blockquote, body center, body code, body div, body h1, body h2,  body h4, body h5, body h6, body i, body img, , body pre, body span, body table, body td, body th, body tr, body u, body video {
   margin: 0;
   padding: 0;
   border: 0;
@@ -9904,8 +9946,8 @@ body .header ul .list_item {
   font-weight: 600;
   clear: both;
   display: inline-block;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 11px;
+  padding-right: 11px;
   margin: 0;
   color: #000;
   white-space: nowrap;
@@ -9939,12 +9981,15 @@ body .heading {
   padding-bottom: 30px;
   background-color: #929551;
   padding: 0;
+  padding-top: 95px;
 }
 body .heading .cover {
   height: 50vh;
-  background-image: url("https://static.tildacdn.com/tild3163-6632-4637-b839-366166313766/-/resize/20x/IMG_0827.jpg");
+  background-image: url("/local/templates/sweet/images/header.png");
   background-repeat: no-repeat;
   padding: 0;
+
+  background-size: cover;
 }
 body .heading .cover .cover__carrier {
   height: 50vh;
@@ -9963,7 +10008,7 @@ body .heading .cover .cover__carrier {
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: unset;
   background-attachment: scroll;
-  background-image: url("https://thumb.tildacdn.com/tild3163-6632-4637-b839-366166313766/-/format/webp/IMG_0827.jpg");
+  /*background-image: url("https://thumb.tildacdn.com/tild3163-6632-4637-b839-366166313766/-/format/webp/IMG_0827.jpg");*/
   overflow: hidden;
 }
 body .heading .cover .cover__carrier.loaded {
@@ -10088,6 +10133,7 @@ body .bx-blue .btn.btn-default {
   font-size: 14px;
   background-color: #929551;
   border-color: #929551;
+  color: #ffffff;
 }
 body .bx-blue .btn.btn-default:hover {
   background-color: #5b3a24;
@@ -10141,6 +10187,224 @@ body .bx-sbb-empty-cart-container a {
 }
 body .mainpart a {
   color: #000000;
+}
+body .mainpart h1 {
+  padding: 10px 0;
+}
+body .t452_scrolltop {
+  cursor: pointer;
+}
+body .adding-slider-item {
+  width: 200px;
+}
+body .prop-addings h3 {
+  padding: 16px;
+}
+body .adding-slider-item {
+  display: block;
+  width: 100%;
+  margin: 5px 0;
+}
+body .adding-slider-item div {
+  display: inline-block;
+}
+body .adding-slider-item div:first-child {
+  min-width: 207px;
+}
+body .adding-slider-item div:nth-child(2n) {
+  min-width: 85px;
+}
+body .adding-slider-item .product-item-button-container span {
+  position: absolute;
+  font-size: 11px;
+  padding-left: 6px;
+  padding-top: 3px;
+}
+body .addingPic {
+  display: inline-block;
+}
+body .addingPic img {
+  height: 135px;
+}
+body .addingdtodish .addingAdded-clone {
+  display: none;
+}
+body .addingdtodish .addingAdded span:last-child {
+  cursor: pointer;
+}
+body .catalog-section .product-item-list .product-list {
+  margin-top: 20px;
+}
+body .catalog-section .product-item-list .product-list .product-item {
+  text-align: center;
+  padding-bottom: 25px;
+}
+body .catalog-section .product-item-list .product-list .product-item .product-item-image-original {
+  width: 300px;
+  height: 300px;
+  display: block;
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+body .product-item-detail-slider-container img {
+  border-radius: 5px;
+}
+body .nav.footer a:hover {
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+
+@media (min-width: 360px) and (max-width: 768px) {
+  body {
+    height: 100%;
+  }
+  body .mainpart {
+    padding-top: 160px;
+  }
+  body .heading {
+    display: none;
+  }
+  body .header .rightside, body .header .centercontainer {
+    display: none;
+  }
+  body .header .toggler {
+    width: 40px;
+    float: right;
+    top: 22px;
+    position: relative;
+    right: 15px;
+    cursor: pointer;
+  }
+  body .header .toggler.closing {
+    position: absolute;
+    z-index: 100;
+  }
+  body .header .toggler.closing div {
+    position: relative;
+  }
+  body .header .toggler.closing div:first-child {
+    display: none;
+  }
+  body .header .toggler.closing div:nth-child(2n) {
+    transform: rotate(45deg);
+    transition-duration: 1s;
+  }
+  body .header .toggler.closing div:nth-child(3n) {
+    transform: rotate(135deg);
+    transition-duration: 1s;
+    top: -11px;
+  }
+  body .header .toggler div {
+    width: 35px;
+    height: 5px;
+    background-color: #ffffff;
+    margin: 6px 0;
+  }
+  body .header .centercontainer {
+    display: block;
+    position: absolute;
+    background-color: #929551;
+    transition-duration: 0.5s;
+    padding-bottom: 40px;
+    left: 101%;
+  }
+  body .header .centercontainer.active {
+    transform: translateX(-101%);
+  }
+  body .header .centercontainer ul {
+    width: 100%;
+    display: block;
+  }
+  body .header .centercontainer ul .list_item {
+    display: block;
+    width: 100%;
+  }
+  body .header .centercontainer ul .list_item a {
+    padding: 5px;
+  }
+  body .catalog-block-header {
+    margin-top: 25px;
+    font-size: 16px;
+  }
+  body .product-item {
+    padding: 15px 0 70px;
+    text-align: center;
+  }
+  body .product-item .product-item-image-wrapper {
+    padding-top: 80%;
+  }
+  body .product-item .product-item-image-wrapper span {
+    width: 100% !important;
+    background-position: center;
+  }
+  body .product-item .product-item-title a {
+    font-size: 16px;
+  }
+  body .product-item .product-item-price-container {
+    width: 50%;
+    float: left;
+  }
+  body .product-item .product-item-hidden {
+    width: 50%;
+    float: left;
+    margin-top: 6px;
+  }
+  body .footer-2 {
+    padding-top: 10px;
+  }
+  body .cart-block .bx-basket-fixed {
+    position: fixed;
+    height: 45px;
+    top: 95px !important;
+    z-index: 100;
+  }
+
+  .product-item-list {
+    padding-top: 55px;
+  }
+
+  .bx-catalog-element div {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .product-item-detail-slider-container {
+    padding-bottom: 20px;
+  }
+
+  .product-item-detail-pay-block .product-item-detail-price-current {
+    text-align: center;
+  }
+
+  .prop-addings {
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  body .product-item .product-item-price-container {
+    width: 100%;
+  }
+  body .product-item .product-item-hidden {
+    width: 100%;
+  }
+  body .product-item-info-container.product-item-hidden .product-item-button-container a {
+    margin: 3px;
+  }
+}
+
+.adding-slider-section.adding_first {
+  padding-bottom: 20px;
+}
+
+.adding-slider-section.adding_second {
+  opacity: 0.7;
+}
+
+.catalog-section {
+  width: 100%;
 }
 
 /*# sourceMappingURL=styles.css.map */

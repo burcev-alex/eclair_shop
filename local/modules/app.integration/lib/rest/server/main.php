@@ -96,6 +96,8 @@ class Main extends Rest\Api
 				$id = $this->content['params']['id'];
 				$action = $this->content['params']['action'];
 			}
+
+			$this->tolog($this->content, "rest_products");
 			
 			$service = new Union\Services\Element();
 			if($action == "add"){
@@ -146,6 +148,8 @@ class Main extends Rest\Api
 				$action = $this->content['params']['action'];
 			}
 			
+			$this->tolog($this->content, "rest_sections");
+
 			$service = new Union\Services\Section();
 			if($action == "add"){
 				$guid = $service->save($this->content);
@@ -194,6 +198,8 @@ class Main extends Rest\Api
 				$id = $this->content['params']['id'];
 				$action = $this->content['params']['action'];
 			}
+
+			$this->tolog($this->content, "rest_properties");
 			
 			$service = new Union\Services\Property();
 			if($action == "add"){
@@ -218,5 +224,12 @@ class Main extends Rest\Api
 				'data' => ["message" => "Only accepts POST requests"]
 			);
 		}
+	}
+
+	private function tolog($data, $type){
+		$sufix = '_'.date("dmY");
+		\p2log(date("d.m.Y H:i:s"), $type.$sufix);
+		\p2log($data, $type.$sufix);
+		\p2log("----------------------------------------", $type.$sufix);
 	}
 }

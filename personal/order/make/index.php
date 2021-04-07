@@ -3,9 +3,9 @@ define("HIDE_SIDEBAR", true);
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Заказы");
 ?><?$APPLICATION->IncludeComponent(
-	"bitrix:sale.order.ajax", 
-	"main", 
-	array(
+	"bitrix:sale.order.ajax",
+	"main",
+	Array(
 		"ACTION_VARIABLE" => "soa-action",
 		"ADDITIONAL_PICT_PROP_4" => "-",
 		"ADDITIONAL_PICT_PROP_5" => "-",
@@ -16,7 +16,6 @@ $APPLICATION->SetTitle("Заказы");
 		"BASKET_IMAGES_SCALING" => "adaptive",
 		"BASKET_POSITION" => "before",
 		"COMPATIBLE_MODE" => "N",
-		"COMPONENT_TEMPLATE" => "main",
 		"COUNT_DELIVERY_TAX" => "N",
 		"COUNT_DISCOUNT_4_ALL_QUANTITY" => "N",
 		"DELIVERIES_PER_PAGE" => "9",
@@ -37,14 +36,9 @@ $APPLICATION->SetTitle("Заказы");
 		"PAY_SYSTEMS_PER_PAGE" => "9",
 		"PICKUPS_PER_PAGE" => "5",
 		"PICKUP_MAP_TYPE" => "yandex",
-		"PRODUCT_COLUMNS_HIDDEN" => array(
-		),
-		"PRODUCT_COLUMNS_VISIBLE" => array(
-			0 => "PREVIEW_PICTURE",
-			1 => "PROPS",
-		),
-		"PROPS_FADE_LIST_1" => array(
-		),
+		"PRODUCT_COLUMNS_HIDDEN" => array(),
+		"PRODUCT_COLUMNS_VISIBLE" => array("PREVIEW_PICTURE","PROPS"),
+		"PROPS_FADE_LIST_1" => array(),
 		"PROP_1" => "",
 		"SEND_NEW_USER_NOTIFY" => "N",
 		"SERVICES_IMAGES_SCALING" => "adaptive",
@@ -55,6 +49,7 @@ $APPLICATION->SetTitle("Заказы");
 		"SHOW_DELIVERY_INFO_NAME" => "Y",
 		"SHOW_DELIVERY_LIST_NAMES" => "Y",
 		"SHOW_DELIVERY_PARENT_NAMES" => "N",
+		"SHOW_MAP_FOR_DELIVERIES" => array(),
 		"SHOW_MAP_IN_PROPS" => "Y",
 		"SHOW_NEAREST_PICKUP" => "N",
 		"SHOW_NOT_CALCULATED_DELIVERIES" => "L",
@@ -81,8 +76,20 @@ $APPLICATION->SetTitle("Заказы");
 		"USE_PRELOAD" => "N",
 		"USE_PREPAYMENT" => "N",
 		"USE_YM_GOALS" => "N",
-		"SHOW_MAP_FOR_DELIVERIES" => array(
-		)
-	),
-	false
+		"YM_GOALS_COUNTER" => "61642846",
+		"YM_GOALS_EDIT_BASKET" => "BX-basket-edit",
+		"YM_GOALS_EDIT_DELIVERY" => "BX-delivery-edit",
+		"YM_GOALS_EDIT_PAY_SYSTEM" => "BX-paySystem-edit",
+		"YM_GOALS_EDIT_PICKUP" => "BX-pickUp-edit",
+		"YM_GOALS_EDIT_PROPERTIES" => "BX-properties-edit",
+		"YM_GOALS_EDIT_REGION" => "BX-region-edit",
+		"YM_GOALS_INITIALIZE" => "BX-order-init",
+		"YM_GOALS_NEXT_BASKET" => "BX-basket-next",
+		"YM_GOALS_NEXT_DELIVERY" => "BX-delivery-next",
+		"YM_GOALS_NEXT_PAY_SYSTEM" => "BX-paySystem-next",
+		"YM_GOALS_NEXT_PICKUP" => "BX-pickUp-next",
+		"YM_GOALS_NEXT_PROPERTIES" => "BX-properties-next",
+		"YM_GOALS_NEXT_REGION" => "BX-region-next",
+		"YM_GOALS_SAVE_ORDER" => "zakaz"
+	)
 );?><?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/footer.php");?>

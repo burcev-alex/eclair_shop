@@ -14,7 +14,6 @@ use \Bitrix\Main\Localization\Loc;
  */
 
 $this->setFrameMode(true);
-$this->addExternalCss('/bitrix/css/main/bootstrap.css');
 $this->addExternalJs('/local/templates/2/components/bitrix/catalog.element/.default/script.min.js');
 
 $templateLibrary = array('popup', 'fx');
@@ -157,7 +156,9 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 		$labelPositionClass .= isset($positionClassMap[$pos]) ? ' '.$positionClassMap[$pos] : '';
 	}
 }
+
 ?>
+
 <div class="bx-catalog-element bx-<?=$arParams['TEMPLATE_THEME']?>" id="<?=$itemIds['ID']?>"
 	itemscope itemtype="http://schema.org/Product">
 	<div class="container-fluid">
@@ -173,7 +174,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			<?
 		}
 		?>
-		<div class="row">
+
 			<div class="col-md-6 col-sm-12">
 				<div class="product-item-detail-slider-container" id="<?=$itemIds['BIG_SLIDER_ID']?>">
 					<span class="product-item-detail-slider-close" data-entity="close-popup"></span>
@@ -669,7 +670,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 												{
 													?>
 													<div class="product-item-detail-info-container">
-														<a class="btn <?=$showButtonClassName?> product-item-detail-buy-button" id="<?=$itemIds['ADD_BASKET_LINK']?>"
+														<a class="btn <?=$showButtonClassName?> product-item-detail-buy-button"
 															href="javascript:void(0);">
 															<span><?=$arParams['MESS_BTN_ADD_TO_BASKET']?></span>
 														</a>
@@ -680,8 +681,8 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 												if ($showBuyBtn)
 												{
 													?>
-													<div class="product-item-detail-info-container">
-														<a class="btn <?=$buyButtonClassName?> product-item-detail-buy-button" id="<?=$itemIds['BUY_LINK']?>"
+													<div class="product-item-detail-info-container"" >
+														<a id="addToCartButtonProduct" class="btn <?=$buyButtonClassName?> product-item-detail-buy-button" data-productid="<?=$arResult['ID']?>"   data-price-selected="<?=$price["PRICE"]?>"
 															href="javascript:void(0);">
 															<span><?=$arParams['MESS_BTN_BUY']?></span>
 														</a>
@@ -771,17 +772,37 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 				    </div>
 				</div>
                 <?php
-                if($arResult["PROPERTIES"]["ADDINGS"]["VALUE"])
+                if($arResult["PROPERTIES"]["ADDINGS"]["VALUE"] || $arResult["PROPERTIES"]["ADDINGS_SALT"]["VALUE"] )
                 {
+                    if( $arResult["PROPERTIES"]["ADDINGS"]["VALUE"] == "Y") $valAdd = 34; // сладкие добавки
+                    if( $arResult["PROPERTIES"]["ADDINGS_SALT"]["VALUE"] == "Y") $valAdd = 35; // соленые добавки
                 ?>
                 <div class="row">
                     <div class="col-xs-12">
+                        <div class="addingdtodish">
+                            <div class="addingAdded-clone"
+                                 data-id=""
+                                 data-xmlid=""
+                                 data-price=""
+                                 data-currency="RUB"
+                                 data-lid=""
+                                 data-name=""
+                            >
+                                <span class="addingTitle"></span>
+                                <span class="addingPrice"></span>
+                                <span onclick="slider.sku.remove(this)" title="Удалить добавку">×</span>
+                            </div>
+                        </div>
                         <div class="prop-addings">
                             <?
                             $APPLICATION->IncludeComponent(
                                 'strizhi:catalog.element.addings',
                                 '',
-                                array()
+                                array(
+                                    'ELEMENT_ID' => $arResult['ID'],
+                                    'OBNAME' => $obName,
+                                    'VID' => $valAdd,
+                                )
                             );
                             ?>
                         </div>
@@ -789,9 +810,12 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 				</div>
                 <?
                 }
+                else {
+                $this->addExternalJs('/local/components/strizhi/catalog.element.addings/templates/.default/slider.js');
+                }
                 ?>
 			</div>
-		</div>
+
 		<div class="row">
 			<div class="col-xs-12">
 				<?
@@ -859,7 +883,6 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 			</div>
 		</div>
 
-		<div class="row">
 			<div class="col-xs-12">
 				<?
 				if ($arResult['CATALOG'] && $actualItem['CAN_BUY'] && \Bitrix\Main\ModuleManager::isModuleInstalled('sale'))
@@ -1102,7 +1125,7 @@ if (!empty($arParams['LABEL_PROP_POSITION']))
 				}
 				?>
 			</div>
-		</div>
+
 	</div>
 	<!--Small Card-->
 	<div class="product-item-detail-short-card-fixed hidden-xs" id="<?=$itemIds['SMALL_CARD_PANEL_ID']?>">

@@ -6,6 +6,7 @@ $mainPage = $CurrPage == $HomePage? true : false;
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="<?=SITE_TEMPLATE_PATH?>/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="2.png">
     <link rel="apple-touch-icon" sizes="76x76" href="2.png">
@@ -13,8 +14,14 @@ $mainPage = $CurrPage == $HomePage? true : false;
     <link rel="apple-touch-startup-image"  href="2.png">
     <?
     $APPLICATION->SetAdditionalCSS(SITE_TEMPLATE_PATH."/css/styles.css", true);
-$APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
+    $APPLICATION->SetAdditionalCSS("/bitrix/css/main/font-awesome.css", true);
+    $APPLICATION->SetAdditionalCSS("/bitrix/css/main/bootstrap.css", true);
+    $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
+
+$APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/general.js'));
+$APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/bootstrap.js'));
     ?>
+
     <?$APPLICATION->ShowHead();?>
     <title><?$APPLICATION->ShowTitle()?></title>
 </head>
@@ -52,9 +59,8 @@ $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
     );?>
 </div>
 <div id="nav176887217" class="container-fluid header positionfixed ">
-    <div class="maincontainer row" >
-
-        <div class="leftside col-sm-2">
+    <div class="row">
+        <div class="leftside   col-6 col-sm-6 col-md-2 col-lg-2 ">
 
                 <a href="/" style="color:#ffffff;">
                     <img src="<?=SITE_TEMPLATE_PATH?>/images/logo.png" class="t228__imglogo t228__imglogomobile"
@@ -62,7 +68,15 @@ $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
                 </a>
 
         </div>
-        <div class="centercontainer container col-sm-7">
+        <div class="col-xs-6  hidden-md   hidden-lg ">
+            <div class="toggler" onclick="eclair.toggler()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="centercontainer  col-lg-7 col-md-7 hidden-xs">
+
             <?$APPLICATION->IncludeComponent("bitrix:menu", "landing", array(
                 "ROOT_MENU_TYPE" => "top",
                 "MENU_CACHE_TYPE" => "A",
@@ -77,9 +91,9 @@ $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
                 false
             );?>
         </div>
-        <div class="container rightside col-sm-3 hidden-xs">
+        <div class=" rightside   col-lg-3 col-md-3 hidden-xs">
                 <div class="right_descr" style="color:#ffffff;font-size:24px;font-weight:600;">
-                    <div class="phone" style="line-height:24px;" >+7 383 383-33-46<br>
+                    <div class="phone" style="line-height:24px;" >+7 383 311-05-57<br>
                         <span style="font-size: 16px;">
                             <span style="font-weight: 400;" data-redactor-style="font-weight: 400;">
                             <span style="font-size: 14px;" data-redactor-tag="span">г. Новосибирск, Ядринцевская, 21</span>
@@ -88,7 +102,6 @@ $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
                     </div>
                 </div>
         </div>
-        <div class="t228__padding40px"></div>
     </div>
 </div>
 <div id="rec176888153" class=" container-fluid heading hidden-xs">
@@ -126,6 +139,13 @@ $APPLICATION->AddHeadScript($APPLICATION->GetTemplatePath('js/jquery.min.js'));
         );?>
 
         <?
+
+        if(!strstr($CurrPage,'catalog')){
+            ?>
+            <h1><?$APPLICATION->ShowTitle(true)?></h1>
+            <?
+        }
     }
+
     ?>
 

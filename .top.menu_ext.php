@@ -16,7 +16,13 @@ false
 );
 
 foreach($aMenuLinksExt as $key=>$menuLink){
-    if($menuLink["LINK"] == "/catalog/dobavki/"){
+    if($menuLink[1] == "/catalog/dobavki/"){
+            unset($aMenuLinksExt[$key]);
+    }
+    if($menuLink[1] == "/catalog/sladkie/"){
+            unset($aMenuLinksExt[$key]);
+    }
+    if($menuLink[1] == "/catalog/solenye/"){
             unset($aMenuLinksExt[$key]);
     }
 }

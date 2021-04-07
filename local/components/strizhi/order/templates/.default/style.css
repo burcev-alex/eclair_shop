@@ -1,0 +1,12 @@
+input[type="radio"] {
+    display: none;
+}
+input[type="radio"]:checked + label:before {
+    background: #FFFFFF;
+    border: 5px solid #929551;
+    width: 13px;
+    height: 13px;
+}
+div.input-row{
+    margin: 12px 0 12px 0;
+}

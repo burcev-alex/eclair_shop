@@ -28,7 +28,7 @@ class Event
         $eventManager->addEventHandler('main', 'OnProlog', ['\App\Base\Handlers\Main', 'OnProlog']);
 
 	    // новый тип свойства
-	    $eventManager->addEventHandler('main', 'OnUserTypeBuildList', ['\App\Base\UserField\SliderRange', 'GetUserTypeDescription']);
+	    //$eventManager->addEventHandler('main', 'OnUserTypeBuildList', ['\App\Base\UserField\SliderRange', 'GetUserTypeDescription']);
         $eventManager->addEventHandler('iblock', 'OnIBlockPropertyBuildList', ['\App\Base\UserField\Double', 'GetUserTypeDescription']);
         $eventManager->addEventHandler('iblock', 'OnIBlockPropertyBuildList', ['\App\Base\UserField\PropertyIblock', 'GetUserTypeDescription']);
         $eventManager->addEventHandler('main', 'OnUserTypeBuildList', ['\App\Base\UserField\Html', 'GetUserTypeDescription']);

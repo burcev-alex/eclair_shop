@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content=" " name="description">
+  <meta content=" " name="keywords">
+
+  <title>Оформление заказа 3</title>
+
+  <link href="css/style.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="css/selects.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="order">
+  <h1 class="order__title">Оформление заказа</h1>
+
+  <div class="orderRangeMain">
+    <ul class="orderRangeDisc flex">
+      <li>
+        <!--<span class="orderRange__disc"></span>-->
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__active"></span>
+        <span class="orderRange__active_line"></span>
+      </li>
+
+      <li>
+        <span class="orderRange__not"></span>
+      </li>
+    </ul>
+
+    <ul class="orderRange orderRange__last flex">
+      <li class="orderRange__confirmation active">
+        <span class="orderRange__name">Подтверждение</span>
+      </li>
+    </ul>
+  </div>
+
+  <button type="button" class="orderForm__dateClient flex">Данные клиента</button>
+
+  <button type="button" class="orderForm__dateClient flex">Доставка</button>
+
+  <button type="button" class="orderForm__dateClient flex">Оплата</button>
+
+  <form action="#" class="orderForm">
+    <h4 class="orderForm__title">Товары в заказе</h4>
+
+    <div class="orderFormOrder flex">
+      <div class="orderFormOrder__left">
+        <div class="orderFormOrder__title">Каша</div>
+        <p class="orderFormOrder__desc">500 гр. • Овсяная, с маслом, на миндальном молоке</p>
+        <p class="orderFormOrder__add">Добавки: Банан, малиновое варенье</p>
+      </div>
+
+      <div class="orderFormOrder__right">
+        <div class="orderFormOrder__title">200 ₽</div>
+        <div class="orderFormOrder__desc">х1</div>
+      </div>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderFormOrder flex">
+      <div class="orderFormOrder__left">
+        <div class="orderFormOrder__title">Тропический смузи-боул</div>
+      </div>
+
+      <div class="orderFormOrder__right">
+        <div class="orderFormOrder__title">350 ₽</div>
+      </div>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderFormOrder flex">
+      <div class="orderFormOrder__left">
+        <div class="orderFormOrder__title">Дорадо с запеченной тыквой и цитрусовым соусом</div>
+      </div>
+
+      <div class="orderFormOrder__right">
+        <div class="orderFormOrder__title">890 ₽</div>
+      </div>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderFormOrder flex">
+      <div class="orderFormOrder__left">
+        <div class="orderFormOrder__title">Доставка</div>
+        <p class="orderFormOrder__desc">Октябрьский район. Бесплатно от 2500 ₽</p>
+      </div>
+
+      <div class="orderFormOrder__right">
+        <div class="orderFormOrder__title">500 ₽</div>
+      </div>
+    </div>
+
+    <hr class="orderForm__hr">
+
+    <div class="orderFormOrderAmount flex">
+      <div class="orderFormOrderAmount__title">Сумма заказа: <span>4 400 ₽</span></div>
+    </div>
+  </form>
+</div>
+
+<div class="orderForm__amound">
+  <button type="submit" class="orderForm__btn">Оформить заказ за 4 440 ₽</button>
+</div>
+</body>
+</html>
