@@ -65,14 +65,14 @@ class Element
                     } elseif ($firstValue['PROPERTY_TYPE'] == 'E') {
 						$value = $firstValue['VALUE'];
 						// TODO hard code
-                        $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'XML_ID' => $firstValue['VALUE']], false, false, ['ID']);
+                        $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['XML_ID' => $firstValue['VALUE']], false, false, ['ID']);
                         if (IntVal($rsBindElement->AffectedRowsCount()) > 0) {
                             if ($arBindElement = $rsBindElement->Fetch()) {
                                 $value = $arBindElement['ID'];
                             }
                         } else {
 							// TODO hard code
-                            $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'EXTERNAL_ID' => $firstValue['VALUE']], false, false, ['ID']);
+                            $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['EXTERNAL_ID' => $firstValue['VALUE']], false, false, ['ID']);
                             if ($arBindElementOther = $rsBindElementOther->Fetch()) {
                                 $value = $arBindElementOther['ID'];
                             }
@@ -93,14 +93,14 @@ class Element
                 } elseif ($propValues['PROPERTY_TYPE'] == 'E') {
 					$arProperties[$propertyCode] = $propValues['VALUE'];
 					// TODO hard code
-                    $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'XML_ID' => $propValues['VALUE']], false, false, ['ID']);
+                    $rsBindElement = \CIBlockElement::GetList(['SORT' => 'ASC'], ['XML_ID' => $propValues['VALUE']], false, false, ['ID']);
                     if (IntVal($rsBindElement->AffectedRowsCount()) > 0) {
                         while ($arBindElement = $rsBindElement->Fetch()) {
                             $arProperties[$propertyCode] = $arBindElement['ID'];
                         }
                     } else {
 						// TODO hard code
-                        $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['IBLOCK_ID' => 4, 'EXTERNAL_ID' => $propValues['VALUE']], false, false, ['ID']);
+                        $rsBindElementOther = \CIBlockElement::GetList(['SORT' => 'ASC'], ['EXTERNAL_ID' => $propValues['VALUE']], false, false, ['ID']);
                         while ($arBindElementOther = $rsBindElementOther->Fetch()) {
                             $arProperties[$propertyCode] = $arBindElementOther['ID'];
                         }
